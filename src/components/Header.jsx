@@ -7,6 +7,7 @@ import {FaCaretDown, FaRegUser, FaUserCircle} from "react-icons/fa";
 import {GiHamburgerMenu} from "react-icons/gi";
 import {IoIosNotificationsOutline} from "react-icons/io";
 import {IoLogOutOutline} from "react-icons/io5";
+import { MdCancel } from "react-icons/md";
 import {NavLink} from "react-router-dom";
 
 const Header = () => {
@@ -14,7 +15,15 @@ const Header = () => {
     const [drop2, setDrop2] = useState(false);
     const [drop3, setDrop3] = useState(false);
     const [drop4, setDrop4] = useState(false);
+    const [drop5, setDrop5] = useState(false);
     const [openSideBar, setOpenSideBar] = useState(false);
+
+    const [box, setBox ] = useState([1,2,3, 4])
+
+    const handleDelete =(filterItem)=>{
+        const update = box.filter((item)=> item !== filterItem )
+        setBox(update)
+    }
 
     return (
         <>
@@ -161,10 +170,12 @@ const Header = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="w-max h-max">
+                        {/* onMouseLeave={() => setDrop5(false)} */}
+                        <div className="w-max h-max"  >
                             <IoIosNotificationsOutline
                                 size={28}
                                 className="cursor-pointer text-white"
+                                onClick={()=> setDrop5(!drop5)}
                             />
                         </div>
                         <div className="w-max h-max phone:hidden">
@@ -246,6 +257,63 @@ const Header = () => {
                                 <IoLogOutOutline size={17} />
                                 <p className="text-sm">Sign out</p>
                             </div>
+                        </div>
+                        <div
+                            className={`w-full phone:w-[18rem] h-max  rounded bg-white shadow absolute top-[60px] phone:-left-[14rem] flex flex-col items-center gap-5 overflow-y-scroll dropdown ${
+                                drop5 ? "active" : ""
+                            }`}
+                            style={{
+                                padding: "15px",
+                                scrollbarWidth: "none",
+                                msOverflowStyle: "none", 
+                            }}
+                        >
+                            {
+                             box.map((e, i) => (
+                                <div className="w-full h-max flex flex-col gap-2" key={i}>
+                                <div className="w-full h-max flex flex-col items-center gap-1">
+                                    <p className="w-full h-max flex justify-end cursor-pointer " onClick={() => handleDelete(e)}>
+                                         <MdCancel color="red" />
+                                         </p>
+                                    <p className="text-[#364a63] text-2xl w-max flex flex-col items-center font-semibold">
+                                        STARTER PLAN
+                                        <span className="text-sm font-normal text-[#8094ae] ">
+                                            Enjoy entry level of invest & earn money.
+                                        </span>
+                                    </p>
+                                    <div className="w-full flex items-center justify-between">
+                                        <p className="w-1/2 h-max flex flex-col items-center text-1xl text-[#526484]">
+                                            525%
+                                            <span className="text-xs flex items-center text-[#8094ae]">
+                                                Interest
+                                            </span>
+                                        </p>
+                                        <p className="w-1/2 h-max flex flex-col items-center text-1xl text-[#526484]">
+                                            30
+                                            <span className="text-xs text-[#8094ae]">
+                                                Days
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="w-full h-max flex  gap-2 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
+                                    <p className="w-1/2 h-max flex flex-col items-center text-[#526484]">
+                                        Min Deposits 
+                                        <span className="text-xs flex items-center text-[#8094ae]">$1,000.00</span>
+                                    </p>
+                                    <p className="w-1/2 h-max flex flex-col items-center text-[#526484]">
+                                        Max Deposits 
+                                        <span className="text-xs flex items-center text-[#8094ae]" >$10,000.00</span>
+                                    </p>
+                                </div>
+                                <button
+                                        className="w-full h-max py-3 text-xs font-semibold rounded text-[#364a63] bg-[#f5f6fa] border border-gray-300 hover:bg-[#e4e7f2] hover:border-[#cfd4e3] hover:text-[#1a202c] transition-all duration-200"
+                                    >
+                                        CHOOSE THIS PLAN
+                                    </button>
+                            </div>
+                             ))
+                            }
                         </div>
                     </div>
                 </div>
