@@ -268,51 +268,52 @@ const Header = () => {
                                 msOverflowStyle: "none", 
                             }}
                         >
-                            {
-                             box.map((e, i) => (
-                                <div className="w-full h-max flex flex-col gap-2" key={i}>
-                                <div className="w-full h-max flex flex-col items-center gap-1">
-                                    <p className="w-full h-max flex justify-end cursor-pointer " onClick={() => handleDelete(e)}>
-                                         <MdCancel color="red" />
-                                         </p>
-                                    <p className="text-[#364a63] text-2xl w-max flex flex-col items-center font-semibold">
-                                        STARTER PLAN
-                                        <span className="text-sm font-normal text-[#8094ae] ">
-                                            Enjoy entry level of invest & earn money.
-                                        </span>
+                            { box.length > 0 ? 
+                            box.map((e, i) => (
+                                <div className="w-full h-max flex flex-col gap-3" key={i}>
+                                <div className="w-full h-max flex flex-col  gap-1">
+                                    
+                                    <p className="w-[100%] text-[ #364a63] text-l w-max flex justify-between gap-5 items-center font-semibold">
+                                    <p className="w-max h-max flex justify-end bg-[red] text-[white] text-xs	font-size: 0.85rem; "  style={{
+                                        padding: '4px'}}>
+                                        New
                                     </p>
-                                    <div className="w-full flex items-center justify-between">
-                                        <p className="w-1/2 h-max flex flex-col items-center text-1xl text-[#526484]">
+                                        <MdCancel color="red" onClick={() => handleDelete(e)} cursor={'pointer'}/>
+                                    </p>
+                                    <p className="w-[100%] text-[ #364a63] text-m	font-size: 0.95rem;"> STARTER PLAN</p>
+                                    <div className="w-full flex flex-col gap-2">
+                                        <p className="w-1/2 h-max flex items-center gap-2 text-1xl text-[#526484] text-xs	font-size: 0.75rem;">
                                             525%
-                                            <span className="text-xs flex items-center text-[#8094ae]">
+                                            <span className="text-1x1 flex items-center text-[#8094ae]">
                                                 Interest
                                             </span>
                                         </p>
-                                        <p className="w-1/2 h-max flex flex-col items-center text-1xl text-[#526484]">
+                                        <p className="w-1/2 h-max flex items-center gap-2 text-1xl text-[#526484] text-xs	font-size: 0.75rem;">
                                             30
-                                            <span className="text-xs text-[#8094ae]">
+                                            <span className="text-1x1 text-[#8094ae]">
                                                 Days
                                             </span>
                                         </p>
                                     </div>
                                 </div>
-                                <div className="w-full h-max flex  gap-2 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
-                                    <p className="w-1/2 h-max flex flex-col items-center text-[#526484]">
+                                <div className="w-full h-max flex flex-col gap-2  text-sm text-[#526484]">
+                                    <p className="w-[100%] h-max flex items-center text-[#526484] gap-2 text-xs	font-size: 0.75rem;">
                                         Min Deposits 
                                         <span className="text-xs flex items-center text-[#8094ae]">$1,000.00</span>
                                     </p>
-                                    <p className="w-1/2 h-max flex flex-col items-center text-[#526484]">
+                                    <p className="w-[100%] h-max flex items-center text-[#526484] gap-2 text-xs	font-size: 0.75rem;">
                                         Max Deposits 
                                         <span className="text-xs flex items-center text-[#8094ae]" >$10,000.00</span>
                                     </p>
                                 </div>
                                 <button
-                                        className="w-full h-max py-3 text-xs font-semibold rounded text-[#364a63] bg-[#f5f6fa] border border-gray-300 hover:bg-[#e4e7f2] hover:border-[#cfd4e3] hover:text-[#1a202c] transition-all duration-200"
+                                        className="w-full h-max py-3 text-xs font-semibold rounded text-[#ffff] bg-[#a286f4] border border-gray-300 hover:bg-[#bca6fd] hover:border-[#cfd4e3] hover:text-[#ffff] transition-all duration-200"
                                     >
                                         CHOOSE THIS PLAN
                                     </button>
                             </div>
-                             ))
+                             )) : <span className="text-xs font-semibold rounded text-[grey]"> NO NOTIFICATIONS YET </span>
+                              
                             }
                         </div>
                     </div>
