@@ -1,8 +1,11 @@
 import {FaChevronRight, FaStarOfLife} from "react-icons/fa";
 import {FaArrowRightLong, FaRightLong} from "react-icons/fa6";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 
 const Investments = () => {
+
+    const Nav = useNavigate()
+
     return (
         <div className="w-full h-max bg-[#f5f6fa] px-48 phone:gap-6 phone:px-6 py-4">
             <div className="w-full h-max flex flex-col gap-3 mt-4">
@@ -10,7 +13,9 @@ const Investments = () => {
                     <p className="w-full h-max flex justify-between">
                         My Plans{" "}
                         <span className="w-max h-max flex gap-4">
-                            <button className="w-max h-max flex items-center justify-center text-white font-semibold bg-[#a286f4] text-xs px-4 py-2 rounded gap-2">
+                            <button className="w-max h-max flex items-center justify-center text-white font-semibold bg-[#a286f4] text-xs px-4 py-2 rounded gap-2"
+                            onClick={() => Nav('my-withdrawal')}
+                            >
                                 Withdrawals
                                 <FaArrowRightLong />
                             </button>
