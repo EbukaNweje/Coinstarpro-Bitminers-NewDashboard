@@ -1,7 +1,9 @@
 import {FaInstagram, FaTelegram, FaTwitter} from "react-icons/fa";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 
 const Login = () => {
+
+    const Nav = useNavigate()
     return (
         <div className="w-full h-screen">
             <div className="w-full h-12 bg-[#f8f8f8] phone:hidden px-48 flex items-center justify-between">
@@ -39,7 +41,8 @@ const Login = () => {
                         required
                     />
                     <button
-                        type="submit"
+                        // type="submit"
+                        onClick={() => Nav('/dashboard')}
                         className="w-40 h-12 rounded bg-[#a286f4] text-white text-sm font-bold transition-all duration-500 hover:bg-white hover:border-2 hover:text-[#a286f4] hover:border-[#a286f4]"
                     >
                         LOG IN

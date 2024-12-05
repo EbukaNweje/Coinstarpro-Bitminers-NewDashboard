@@ -1,4 +1,4 @@
-import {RouterProvider, createBrowserRouter} from "react-router-dom";
+import {RouterProvider, createHashRouter} from "react-router-dom";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Verify from "./pages/auth/Verify";
@@ -19,7 +19,7 @@ import Profile from "./pages/dashboard/Profile";
 import Referral from "./pages/dashboard/Referral";
 
 const App = () => {
-    const router = createBrowserRouter([
+    const router = createHashRouter([
         {
             path: "",
             element: <Login />,
@@ -37,54 +37,18 @@ const App = () => {
             errorElement: <ErrorPage />,
             element: <DashboardRoute element={<Dashboard />}></DashboardRoute>,
             children: [
-                {
-                    path: "",
-                    element: <DashboardHome />,
-                },
-                {
-                    path: "deposit",
-                    element: <Deposit />,
-                },
-                {
-                    path: "deposit-pay",
-                    element: <DepositPay />,
-                },
-                {
-                    path: "my-plans",
-                    element: <MyPlans />,
-                },
-                {
-                    path: "new-withdrawal",
-                    element: <NewWithdrawal />,
-                },
-                {
-                    path: "new-bonus",
-                    element: <NewBonus />,
-                },
-                {
-                    path: "my-invest",
-                    element: <Investments />,
-                },
-                {
-                    path: "my-invest/:id",
-                    element: <InvestmentsView />,
-                },
-                {
-                    path: "my-deposit",
-                    element: <DepositHistory />,
-                },
-                {
-                    path: "my-withdrawal",
-                    element: <MyWithdrawal />,
-                },
-                {
-                    path: "profile",
-                    element: <Profile />,
-                },
-                {
-                    path: "referus",
-                    element: <Referral />,
-                },
+                { path: "", element: <DashboardHome />, },
+                { path: "deposit", element: <Deposit />, },
+                { path: "deposit-pay",element: <DepositPay />, },
+                { path: "my-plans", element: <MyPlans />,},
+                { path: "new-withdrawal",element: <NewWithdrawal />,},
+                { path: "new-bonus",element: <NewBonus />,},
+                { path: "my-invest",element: <Investments />,},
+                { path: "my-invest/:id",element: <InvestmentsView />,},
+                { path: "my-deposit",element: <DepositHistory />,},
+                { path: "my-withdrawal",element: <MyWithdrawal />,},
+                { path: "profile",element: <Profile />,},
+                { path: "referus",element: <Referral />,},
             ],
         },
     ]);

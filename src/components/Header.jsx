@@ -8,7 +8,7 @@ import {GiHamburgerMenu} from "react-icons/gi";
 import {IoIosNotificationsOutline} from "react-icons/io";
 import {IoLogOutOutline} from "react-icons/io5";
 import { MdCancel } from "react-icons/md";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 
 const Header = () => {
     const [drop1, setDrop1] = useState(false);
@@ -24,6 +24,8 @@ const Header = () => {
         const update = box.filter((item)=> item !== filterItem )
         setBox(update)
     }
+
+    const Nav = useNavigate()
 
     return (
         <>
@@ -65,7 +67,9 @@ const Header = () => {
                                         }`}
                                     >
                                         <NavLink to={"/dashboard/my-plans"}>
-                                            <div className="w-full pl-2 text-gray-600 h-10 border-b-gray-300 flex items-center cursor-pointer">
+                                            <div className="w-full pl-2 text-gray-600 h-10 border-b-gray-300 flex items-center cursor-pointer"
+                                            onClick={() => Nav('deposit')}
+                                            >
                                                 Deposit
                                             </div>
                                         </NavLink>
@@ -156,7 +160,7 @@ const Header = () => {
                             onClick={() => setDrop4(!drop4)}
                         >
                             <div className="w-max h-max">
-                                <FaUserCircle size={28} />
+                                <FaUserCircle size={28} onClick={() => Nav('profile')}/>
                             </div>
                             <div className="w-max h-max flex flex-col phone:hidden">
                                 <p className="text-xs font-semibold text-red-500">
