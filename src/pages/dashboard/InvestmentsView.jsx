@@ -1,5 +1,6 @@
 import {FaPlus} from "react-icons/fa";
 import {FaArrowLeftLong} from "react-icons/fa6";
+import { Nav } from "rsuite";
 
 const InvestmentView = () => {
     return (
@@ -7,7 +8,7 @@ const InvestmentView = () => {
             <div className="w-full h-max flex flex-col gap-3 phone:gap-6 mt-4">
                 <div className="w-full h-max flex items-center gap-2 text-lg cursor-pointer">
                     <p className="w-full h-max flex gap-2 items-center text-[#8094ae]">
-                        <FaArrowLeftLong />
+                        <FaArrowLeftLong  onClick={()=>Nav()}/>
                         My Plans
                     </p>
                 </div>

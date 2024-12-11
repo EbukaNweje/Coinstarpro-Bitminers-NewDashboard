@@ -3,8 +3,11 @@ import {FaRegCopy} from "react-icons/fa";
 import {FaArrowRightLong} from "react-icons/fa6";
 import {IoIosInformationCircleOutline} from "react-icons/io";
 import {IoLink, IoOpenOutline} from "react-icons/io5";
+import { useNavigate } from "react-router";
 
 const DashboardHome = () => {
+const Nav = useNavigate()
+
     return (
         <div className="w-full h-max px-48 phone:px-6 py-10 phone:py-6 flex flex-col gap-8 ">
             <div className="w-full h-max flex justify-between">
@@ -16,7 +19,7 @@ const DashboardHome = () => {
                         </p>
                         <div className="w-max h-max py-2 rounded bg-white border border-gray-300 text-sm font-semibold px-3 flex items-center justify-center gap-2">
                             <p>My Plans</p>
-                            <FaArrowRightLong />
+                            <FaArrowRightLong  onClick={() => Nav('my-plans')}/>
                         </div>
                     </div>
                     <p className="text-[rgb(82,100,132)] mt-1">
@@ -109,7 +112,9 @@ const DashboardHome = () => {
                         </div>
                     </div>
                     <div className="w-full h-max flex">
-                        <button className="w-full h-max py-3 font-semibold rounded text-white bg-[#a286f4]">
+                        <button className="w-full h-max py-3 font-semibold rounded text-white bg-[#a286f4]"
+                        onClick={() => Nav('new-withdrawal')}
+                        >
                             Withdraw Funds
                         </button>
                     </div>
@@ -138,7 +143,7 @@ const DashboardHome = () => {
                         </div>
                     </div>
                     <div className="w-full h-max flex flex-col gap-4">
-                        <button className="w-full h-max py-3 font-semibold rounded text-white bg-[#a286f4]">
+                        <button className="w-full h-max py-3 font-semibold rounded text-white bg-[#a286f4]" onClick={()=>Nav('deposit')}>
                             Deposit
                         </button>
                         <p className="w-full h-max flex flex-col items-center text-sm">
@@ -165,7 +170,9 @@ const DashboardHome = () => {
                         </div>
                     </div>
                     <div className="w-full h-max flex">
-                        <button className="w-full h-max py-3 font-semibold rounded text-white bg-[#a286f4]">
+                        <button className="w-full h-max py-3 font-semibold rounded text-white bg-[#a286f4]"
+                        onClick={() => Nav("my-invest")}
+                        >
                             See All Investment
                         </button>
                     </div>
@@ -183,7 +190,9 @@ const DashboardHome = () => {
                             </p>
                         </div>
                         <div className="w-max flex">
-                            <button className="w-max h-max px-4 py-2 text-xs font-semibold rounded text-white bg-[#a286f4]">
+                            <button className="w-max h-max px-4 py-2 text-xs font-semibold rounded text-white bg-[#a286f4]"
+                            onClick={() => Nav('referus')}
+                            >
                                 Referral List
                             </button>
                         </div>
