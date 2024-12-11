@@ -146,6 +146,13 @@ const Header = () => {
                                                 Withdrawal
                                             </div>
                                         </NavLink>
+                                        <NavLink
+                                            to={"/dashboard/profit"}
+                                        >
+                                            <div className="w-full pl-2 text-gray-600 h-10  flex items-center cursor-pointer">
+                                                Profit
+                                            </div>
+                                        </NavLink>
                                     </div>
                                 </div>
                             </div>

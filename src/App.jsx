@@ -17,6 +17,9 @@ import DepositHistory from "./pages/dashboard/DepositHistory";
 import MyWithdrawal from "./pages/dashboard/MyWithdrawal";
 import Profile from "./pages/dashboard/Profile";
 import Referral from "./pages/dashboard/Referral";
+import Forgottenpassword from "./pages/auth/Forgottenpassword";
+import Reset from "./pages/auth/Reset";
+import Profit from "./pages/dashboard/Profit";
 
 const App = () => {
     const router = createHashRouter([
@@ -27,6 +30,12 @@ const App = () => {
         {
             path: "register",
             element: <Signup />,
+        },
+        {
+            path: "forgotten-password", element: <Forgottenpassword />,
+        },
+        {
+            path: "reset-password", element: <Reset/>,
         },
         {
             path: "verify",
@@ -49,6 +58,7 @@ const App = () => {
                 { path: "my-withdrawal",element: <MyWithdrawal />,},
                 { path: "profile",element: <Profile />,},
                 { path: "referus",element: <Referral />,},
+                { path: "profit",element: <Profit />,},
             ],
         },
     ]);

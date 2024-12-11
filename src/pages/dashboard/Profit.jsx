@@ -3,7 +3,7 @@ import {FaArrowRightLong, FaRightLong} from "react-icons/fa6";
 import {MdHistory} from "react-icons/md";
 import {NavLink, useNavigate} from "react-router-dom";
 
-const MyWithdrawal = () => {
+const Profit = () => {
     const Nav = useNavigate()
     return (
         <div className="w-full h-max bg-[#f5f6fa] px-48 phone:gap-6 phone:px-6 py-4">
@@ -20,7 +20,7 @@ const MyWithdrawal = () => {
                     </p>
                 </div>
                 <p className="text-4xl font-semibold text-[#364a63] flex flex-col">
-                    Withdrawal History (2)
+                    Profit History (2)
                 </p>
             </div>
             <div className="w-full h-max flex flex-col gap-2 mt-6">
@@ -34,7 +34,7 @@ const MyWithdrawal = () => {
                                 - External Fund Withdrawal (Bitcoin)
                             </p>
                             <p className="text-[#8094ae] text-sm flex gap-2">
-                                Withdraw Amount -
+                                Profit Amount -
                                
                             </p>
                         </div>
@@ -77,4 +77,4 @@ const MyWithdrawal = () => {
     );
 };
 
-export default MyWithdrawal;
+export default Profit;
