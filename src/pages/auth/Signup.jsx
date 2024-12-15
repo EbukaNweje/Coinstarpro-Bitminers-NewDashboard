@@ -157,7 +157,7 @@ const Signup = () => {
 
           <button
             type="submit"
-            className="w-40 h-12 rounded bg-[#a286f4] text-white text-sm font-bold transition-all duration-500 hover:bg-white hover:border-2 hover:text-[#a286f4] hover:border-[#a286f4]"
+            className="w-40 h-12 rounded bg-[#8865f0] text-white text-sm font-bold transition-all duration-500 hover:bg-white hover:border-2 hover:text-[#a286f4] hover:border-[#a286f4]"
           >
             Register
           </button>
