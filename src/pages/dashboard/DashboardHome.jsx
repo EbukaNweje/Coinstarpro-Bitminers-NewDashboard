@@ -1,12 +1,74 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import {CgTranscript} from "react-icons/cg";
 import {FaRegCopy} from "react-icons/fa";
 import {FaArrowRightLong} from "react-icons/fa6";
 import {IoIosInformationCircleOutline} from "react-icons/io";
 import {IoLink, IoOpenOutline} from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { userData } from "../../global/features";
 
 const DashboardHome = () => {
-const Nav = useNavigate()
+    const [userDatas, setUserDatas] = useState({});
+    const [exchangeRate, setExchangeRate] = useState(null);
+
+    const dispatch = useDispatch()
+    const Nav = useNavigate()
+
+    const id = useSelector((state)=> state.id)
+    console.log(id);
+
+    const handleGetUser = async () => {
+        await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
+            .then(response => {
+                 console.log(response?.data?.data);
+                setUserDatas(response?.data?.data);
+                // dispatch(userData(response?.data.data));
+                // localStorage.setItem("UserId", response?.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+    console.log(userDatas);
+  
+    useEffect(() => {
+        if (id) {
+            handleGetUser();
+        }
+    }, [id]);
+
+    const totalBalance = userDatas?.accountBalance + userDatas?.totalProfit
+    const totalTradingBalance =  userDatas.totalWithdrawal + userDatas.tradingAccounts    
+
+    useEffect(() => {
+        // Fetch the current exchange rate from an API (replace with a reliable API)
+        axios
+            .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+            .then((response) => {
+                const rate = response.data.bpi.USD.rate.replace(",", ""); // assuming USD rate
+                setExchangeRate(parseFloat(rate));
+            })
+            .catch((error) => {
+                console.error("Error fetching exchange rate:", error);
+            });
+    }, []); 
+
+    const bitcoinValue = userDatas?.accountBalance / exchangeRate;
+    const bitcoinValue2 = userDatas?.totalProfit / exchangeRate;
+    const bitcoinValue3 = userDatas?.bonus / exchangeRate;
+    const bitcoinValue4 = userDatas?.ref / exchangeRate;
+    const bitcoinValue5 = userDatas?.totalDeposit / exchangeRate;
+    const bitcoinValue6 = userDatas?.totalWithdrawal / exchangeRate;
+    const bitcoinValue7 = userDatas?.totalInvestment / exchangeRate;
+    const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
+    const roundedNumber2 = parseFloat(bitcoinValue2.toFixed(8));
+    const roundedNumber3 = parseFloat(bitcoinValue3.toFixed(8));
+    const roundedNumber4 = parseFloat(bitcoinValue4.toFixed(8));
+    const roundedNumber5 = parseFloat(bitcoinValue5.toFixed(8));
+    const roundedNumber6 = parseFloat(bitcoinValue6.toFixed(8));
+    const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
 
     return (
         <div className="w-full h-max px-48 phone:px-6 py-10 phone:py-6 flex flex-col gap-8 ">
@@ -15,7 +77,7 @@ const Nav = useNavigate()
                     <p>Welcome!</p>
                     <div className="w-max phone:w-full flex phone:flex-col phone:items-start phone:gap-4 items-center gap-8">
                         <p className="text-4xl phone:w-full font-semibold text-[rgb(54,74,99)] truncate">
-                            Freya Conner Hamilton Clark
+                            {userDatas?.firstName} {userDatas?.lastName} {userDatas?.userName}
                         </p>
                         <div className="w-max h-max py-2 rounded bg-white border border-gray-300 text-sm font-semibold px-3 flex items-center justify-center gap-2">
                             <p>My Plans</p>
@@ -48,9 +110,9 @@ const Nav = useNavigate()
                                 </span>
                             </p>
                             <p className="w-full flex items-center justify-between text-3xl text-white">
-                                $10.00
+                                ${userDatas?.accountBalance}
                                 <span className="text-[#1ee0ac] text-sm">
-                                    100%
+                               { roundedNumber}
                                 </span>
                             </p>
                         </div>
@@ -64,9 +126,9 @@ const Nav = useNavigate()
                                 </span>
                             </p>
                             <p className="w-full flex items-center justify-between text-3xl text-white">
-                                $10.00
+                                ${userDatas?.totalInvestment}
                                 <span className="text-[#1ee0ac] text-sm">
-                                    100%
+                                    {roundedNumber7}
                                 </span>
                             </p>
                         </div>
@@ -80,9 +142,9 @@ const Nav = useNavigate()
                                 </span>
                             </p>
                             <p className="w-full flex items-center justify-between text-3xl text-white">
-                                $10.00
+                                ${userDatas?.totalProfit}
                                 <span className="text-[#1ee0ac] text-sm">
-                                    100%
+                                    {roundedNumber2}
                                 </span>
                             </p>
                         </div>
@@ -95,19 +157,19 @@ const Nav = useNavigate()
                         <div className="w-full h-max flex flex-col gap-2">
                             <p className="text-[#8094ae]">Balance in Account</p>
                             <p className="w-full flex items-center justify-between text-3xl text-[#526484]">
-                                $10.00
+                            ${userDatas?.accountBalance}
                             </p>
                         </div>
                         <div className="w-full h-max flex flex-col gap-2 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
                             <p className="w-full h-max flex justify-between">
-                                Available Funds <span>$10.00</span>
+                                Available Funds <span>${userDatas?.accountBalance}</span>
                             </p>
                             <p className="w-full h-max flex justify-between">
-                                Available Funds <span>$10.00</span>
+                                Available Profits <span>${userDatas?.totalProfit}</span>
                             </p>
                             <div className="w-full h-max flex justify-between border-t border-t-gray-300 font-semibold text-black py-2">
                                 <p>Total</p>
-                                <p>$10.00</p>
+                                <p>${totalBalance}</p>
                             </div>
                         </div>
                     </div>
@@ -124,21 +186,21 @@ const Nav = useNavigate()
                         <div className="w-full h-max flex flex-col gap-2">
                             <p className="text-[#8094ae]">Confirmed Deposits</p>
                             <p className="w-full flex items-center justify-between text-3xl text-[#526484]">
-                                $10.00
+                                ${userDatas?.totalDeposit }
                             </p>
                         </div>
                         <div className="w-full h-max flex flex-col gap-2 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
-                            <p className="w-full h-max flex justify-between">
+                            {/* <p className="w-full h-max flex justify-between">
                                 Pending Deposits <span>$10.00</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
+                            </p> */}
+                            {/* <p className="w-full h-max flex justify-between">
                                 Pending Withdrawal <span>$10.00</span>
+                            </p> */}
+                            <p className="w-full h-max flex justify-between">
+                                Bonus <span>${userDatas?.bonus}</span>
                             </p>
                             <p className="w-full h-max flex justify-between">
-                                Confirmed Withdrawal <span>$10.00</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Referral Bonus <span>$10.00</span>
+                                Referral Bonus <span>${userDatas?.ref}</span>
                             </p>
                         </div>
                     </div>
@@ -157,15 +219,15 @@ const Nav = useNavigate()
                         <div className="w-full h-max flex flex-col gap-2">
                             <p className="text-[#8094ae]">My Investment</p>
                             <p className="w-full flex items-center justify-between text-3xl text-[#526484]">
-                                0 - Total
+                            ${totalTradingBalance} - Total
                             </p>
                         </div>
                         <div className="w-full h-max flex flex-col gap-2 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
                             <p className="w-full h-max flex justify-between">
-                                Active Packages <span>0</span>
+                                Total withdrawal<span>${userDatas?.totalWithdrawal}</span>
                             </p>
                             <p className="w-full h-max flex justify-between">
-                                Active Packages <span>0</span>
+                                Trading acoounts Packages <span>${userDatas?.tradingAccounts}</span>
                             </p>
                         </div>
                     </div>

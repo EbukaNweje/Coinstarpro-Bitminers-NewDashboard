@@ -1,15 +1,17 @@
 // import MenuDropDown from "./MenuDropDown";
 
 import {Drawer} from "antd";
-import {useState} from "react";
+import axios from "axios";
+import {useEffect, useState} from "react";
 import {CiSettings} from "react-icons/ci";
 import {FaCaretDown, FaRegUser, FaUserCircle} from "react-icons/fa";
 import {GiHamburgerMenu} from "react-icons/gi";
 import {IoIosNotificationsOutline} from "react-icons/io";
 import {IoLogOutOutline} from "react-icons/io5";
 import { MdCancel } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import {NavLink, useNavigate} from "react-router-dom";
-
+import Logo from '../assets/logo.png'
 const Header = () => {
     const [drop1, setDrop1] = useState(false);
     const [drop2, setDrop2] = useState(false);
@@ -17,6 +19,8 @@ const Header = () => {
     const [drop4, setDrop4] = useState(false);
     const [drop5, setDrop5] = useState(false);
     const [openSideBar, setOpenSideBar] = useState(false);
+    const [laoding, setLoading] = useState(false)
+    const [userDatas, setUserDatas] = useState();
 
     const [box, setBox ] = useState([1,2,3, 4])
 
@@ -24,8 +28,39 @@ const Header = () => {
         const update = box.filter((item)=> item !== filterItem )
         setBox(update)
     }
-
+    const dispatch = useDispatch()
     const Nav = useNavigate()
+    const id = useSelector((state)=> state.id)
+    console.log(id);
+
+    const handleGetUser = async () => {
+        await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
+            .then(response => {
+                 console.log(response?.data?.data);
+                setUserDatas(response?.data?.data);
+                // dispatch(userData(response?.data.data));
+                // localStorage.setItem("UserId", response?.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+    console.log(userDatas);
+  
+    const Profil =  userDatas?.firstName.charAt(0).toUpperCase()
+    // const Profile = Profil
+    console.log(Profil);
+    
+    useEffect(() => {
+        if (id) {
+            handleGetUser();
+        }
+    }, [id]);
+    
+    
+    // { loading ? <ClipLoader color='white' /> :
+    //     "Register" 
+    //     } 
 
     return (
         <>
@@ -33,13 +68,13 @@ const Header = () => {
                 <div className="w-full h-full flex justify-between items-center">
                     <div className="w-max h-full flex items-center gap-10">
                         <div className="w-max h-full flex items-center phone:gap-4">
-                            {/* <img src="" alt="" /> */}
                             <GiHamburgerMenu
                                 className="hidden phone:flex text-white"
                                 size={26}
                                 onClick={() => setOpenSideBar(!openSideBar)}
                             />
-                            <p className="text-3xl font-semibold">Logo</p>
+                              <img src={Logo} alt="Logo" className="w-full h-full"/>
+                            {/* <p className="text-3xl font-semibold">Logo</p> */}
                         </div>
                         <div className="w-max h-full flex gap-2 text-white phone:hidden">
                             <NavLink to={"/dashboard"}>
@@ -174,7 +209,7 @@ const Header = () => {
                                     Unverified
                                 </p>
                                 <p className="w-max flex items-center text-xs font-semibold">
-                                    Freya Conner Hamilton Clark{" "}
+                                 {userDatas?.firstName} {userDatas?.lastName}{" "}
                                     <span>
                                         <FaCaretDown />
                                     </span>
@@ -203,15 +238,15 @@ const Header = () => {
                             <div className="w-full h-max flex gap-2 items-center justify-center pl-4 py-5 border-t-[3px] rounded-t border-t-[#a287f4]">
                                 <div className="w-max h-max flex items-center">
                                     <span className="w-10 h-10 rounded-full bg-[#12dba4] flex items-center justify-center text-white">
-                                        RJ
+                                        {Profil}
                                     </span>
                                 </div>
                                 <div className="w-max h-max flex flex-col">
                                     <p className="truncate text-sm font-semibold text-[#364a63]">
-                                        FreyaConner Hamilton
+                                    {userDatas?.firstName} {userDatas?.lastName}
                                     </p>
                                     <p className="truncate text-xs text-[#8094ae]">
-                                        businesscocoltd@gmail.com
+                                    {userDatas?.email}
                                     </p>
                                 </div>
                                 <div className="w-max">
@@ -226,7 +261,7 @@ const Header = () => {
                                     ACCOUNT BALANCE
                                 </p>
                                 <p className="text-[#a287f4] text-xl">
-                                    10.00 $
+                                    {userDatas?.accountBalance}$
                                 </p>
                                 <p className="text-sm text-[#8094ae]">
                                     Active Plans <span>0 plans</span>

@@ -1,14 +1,15 @@
 import {FaPlus} from "react-icons/fa";
 import {FaArrowLeftLong} from "react-icons/fa6";
-import { Nav } from "rsuite";
+import { useNavigate } from "react-router";
 
 const InvestmentView = () => {
+    const Nav = useNavigate()
     return (
         <div className="w-full h-max bg-[#f5f6fa] px-48 phone:gap-6 phone:px-6 py-4">
             <div className="w-full h-max flex flex-col gap-3 phone:gap-6 mt-4">
                 <div className="w-full h-max flex items-center gap-2 text-lg cursor-pointer">
-                    <p className="w-full h-max flex gap-2 items-center text-[#8094ae]">
-                        <FaArrowLeftLong  onClick={()=>Nav()}/>
+                    <p className="w-full h-max flex gap-2 items-center text-[#8094ae]"  onClick={()=>Nav(-1)}>
+                        <FaArrowLeftLong  onClick={()=>Nav(-1)}/>
                         My Plans
                     </p>
                 </div>

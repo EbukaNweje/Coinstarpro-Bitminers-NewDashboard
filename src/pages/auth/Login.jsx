@@ -3,7 +3,8 @@ import {NavLink, useNavigate} from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { toast, Toaster } from 'react-hot-toast';
+import toast,{ Toaster } from 'react-hot-toast';
+import axios from "axios";
 
 const Login = () => {
 
@@ -25,29 +26,29 @@ const Nav = useNavigate()
 
   const Onsubmit = async (data, e) => {
     console.log(data);
-    Nav('/dashboard')
-    
-    // e.preventDefault(); 
-    // const url = 'https://edutrack-jlln.onrender.com/api/v1/school/log-in'
-    // const FormData ={
-    //   email: data.email,
-    //   password: data.password,
-    // }
-    
-    //  await axios.post(url, FormData)
-    // .then( res => {
-    //  if (res.data.data.isVerified === true) {
-    //     Nav('/dashbord')
-    //     toast.success('login successfull')
-    //  }
-    //  else{
-    //   toast.error('Please Verify your email :)')
-    //   Nav('')
-    //  }
-    // })
-    // .catch( error => {
-    //   console.log(error);
-    // })
+    e.preventDefault(); 
+    const url = 'https://coinstarpro-bitminers-new-backnd.vercel.app/api/login'
+    const FormData ={
+      email: data.email,
+      password: data.password,
+    }
+    await axios.post(url, FormData)
+    .then((response)=>{
+        console.log("response:",response);
+        toast.success(response.data.message);
+        if (res.data.isVerified === true) {
+            Nav('/dashboard')
+            toast.success('login successfull')
+         }
+         else{
+          toast.error('Please Verify your email :)')
+          Nav("/verify")
+         }
+        
+     })
+     .catch((error)=>{
+       console.log("error:",error)
+     })
   
   };
     return (
@@ -120,7 +121,7 @@ const Nav = useNavigate()
                 </div>
             </div>
             <Toaster position="top-center" />
-        </div>
+            </div>
     );
 };
 

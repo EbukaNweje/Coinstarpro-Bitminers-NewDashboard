@@ -15,9 +15,9 @@ const Deposit = () => {
     return (
         <div className="w-full h-max flex bg-[#f5f6fa] px-48 phone:gap-6 phone:px-6 phone:flex-col py-4">
             <div className="w-[60%] phone:w-full h-max flex flex-col gap-2">
-                <div className="w-max h-max flex items-center gap-2 text-lg cursor-pointer" onClick={()=> Nav(-1)}>
-                    <FaArrowLeftLong onClick={()=> Nav(-1)}/>
-                    <p>Back to plan</p>
+                <div className="w-max h-max flex items-center gap-2 text-lg cursor-pointer" onClick={()=> Nav("dashboard")}>
+                    <FaArrowLeftLong onClick={()=> Nav('dashboard')}/>
+                    <p  onClick={()=> Nav('dashboard')}>Back to plan</p>
                 </div>
                 <p className="text-4xl font-semibold text-[#364a63]">
                     Ready to get started?
