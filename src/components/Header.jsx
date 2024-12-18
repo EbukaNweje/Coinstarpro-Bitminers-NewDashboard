@@ -12,6 +12,8 @@ import { MdCancel } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {NavLink, useNavigate} from "react-router-dom";
 import Logo from '../assets/logo.png'
+import { ClipLoader } from "react-spinners";
+import { logout } from "../global/features";
 const Header = () => {
     const [drop1, setDrop1] = useState(false);
     const [drop2, setDrop2] = useState(false);
@@ -27,21 +29,31 @@ const Header = () => {
     const handleDelete =(filterItem)=>{
         const update = box.filter((item)=> item !== filterItem )
         setBox(update)
+
     }
+
+    // function capitalizeWords(str) {
+    //     return str.replace(/\b\w/g, (char) => char.toUpperCase());
+    //   }
+      
+    //   const fullName = `${userDatas?.firstName} ${userDatas?.lastName}`;
+    //   const formattedName = capitalizeWords(fullName);
     const dispatch = useDispatch()
     const Nav = useNavigate()
     const id = useSelector((state)=> state.id)
     console.log(id);
 
     const handleGetUser = async () => {
+        setLoading(true)
         await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
             .then(response => {
-                 console.log(response?.data?.data);
+                setLoading(false)
                 setUserDatas(response?.data?.data);
                 // dispatch(userData(response?.data.data));
                 // localStorage.setItem("UserId", response?.data);
             })
             .catch(error => {
+                setLoading(false)
                 console.log(error);
             });
     };
@@ -49,7 +61,6 @@ const Header = () => {
   
     const Profil =  userDatas?.firstName.charAt(0).toUpperCase()
     // const Profile = Profil
-    console.log(Profil);
     
     useEffect(() => {
         if (id) {
@@ -58,9 +69,11 @@ const Header = () => {
     }, [id]);
     
     
-    // { loading ? <ClipLoader color='white' /> :
-    //     "Register" 
-    //     } 
+const handleLogout = () =>{
+    dispatch(logout())
+    Nav("/")
+}
+
 
     return (
         <>
@@ -205,11 +218,11 @@ const Header = () => {
                                 <FaUserCircle size={28} onClick={() => Nav('profile')}/>
                             </div>
                             <div className="w-max h-max flex flex-col phone:hidden">
-                                <p className="text-xs font-semibold text-red-500">
-                                    Unverified
-                                </p>
+                                    {
+                                        userDatas?.verify === true ? <p className="text-xs font-semibold text-green-500"> verified </p> : <p className="text-xs font-semibold text-red-500"> Unverified</p>
+                                    }
                                 <p className="w-max flex items-center text-xs font-semibold">
-                                 {userDatas?.firstName} {userDatas?.lastName}{" "}
+                                 { laoding ? <ClipLoader color='white' /> :  `${userDatas?.firstName} ${userDatas?.lastName}${" "}`}
                                     <span>
                                         <FaCaretDown />
                                     </span>
@@ -242,11 +255,12 @@ const Header = () => {
                                     </span>
                                 </div>
                                 <div className="w-max h-max flex flex-col">
-                                    <p className="truncate text-sm font-semibold text-[#364a63]">
-                                    {userDatas?.firstName} {userDatas?.lastName}
+                                    <p   style={{ textTransform: "capitalize" }}
+                                    className="truncate text-sm font-semibold text-[#364a63]">
+                                    { laoding ? <ClipLoader color='white' /> :  `${userDatas?.firstName} ${userDatas?.lastName}${" "}`}
                                     </p>
                                     <p className="truncate text-xs text-[#8094ae]">
-                                    {userDatas?.email}
+                                    { laoding ? <ClipLoader color='white' /> :  `${userDatas?.email}`}
                                     </p>
                                 </div>
                                 <div className="w-max">
@@ -261,7 +275,8 @@ const Header = () => {
                                     ACCOUNT BALANCE
                                 </p>
                                 <p className="text-[#a287f4] text-xl">
-                                    {userDatas?.accountBalance}$
+                                { laoding ? <ClipLoader color='white' /> :  `${userDatas?.accountBalance}$`}
+                                   
                                 </p>
                                 <p className="text-sm text-[#8094ae]">
                                     Active Plans <span>0 plans</span>
@@ -299,7 +314,8 @@ const Header = () => {
                                     <p className="text-sm">Support</p>
                                 </div>
                             </div>
-                            <div className="w-full h-12 flex items-center hover:text-[#a287f4] cursor-pointer transition-all duration-500 gap-2 border-t border-t-gray-300 py-2 pl-8 text-[#526484]">
+                            <div onClick={() => handleLogout()}
+                            className="w-full h-12 flex items-center hover:text-[#a287f4] cursor-pointer transition-all duration-500 gap-2 border-t border-t-gray-300 py-2 pl-8 text-[#526484]">
                                 <IoLogOutOutline size={17} />
                                 <p className="text-sm">Sign out</p>
                             </div>
@@ -345,11 +361,11 @@ const Header = () => {
                                 <div className="w-full h-max flex flex-col gap-2  text-sm text-[#526484]">
                                     <p className="w-[100%] h-max flex items-center text-[#526484] gap-2 text-xs	font-size: 0.75rem;">
                                         Min Deposits 
-                                        <span className="text-xs flex items-center text-[#8094ae]">$1,000.00</span>
+                                        <span className="text-xs flex items-center text-[#8094ae]">{ laoding ? <ClipLoader color='white' /> :  `${userDatas?.accountBalance}$`}                                        </span>
                                     </p>
                                     <p className="w-[100%] h-max flex items-center text-[#526484] gap-2 text-xs	font-size: 0.75rem;">
                                         Max Deposits 
-                                        <span className="text-xs flex items-center text-[#8094ae]" >$10,000.00</span>
+                                        <span className="text-xs flex items-center text-[#8094ae]" > { laoding ? <ClipLoader color='white' /> :  `${userDatas?.accountBalance}$`}                                        </span>
                                     </p>
                                 </div>
                                 <button

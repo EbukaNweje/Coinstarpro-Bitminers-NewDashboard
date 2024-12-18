@@ -70,12 +70,13 @@ const Signup = () => {
     .then(response=>{
       setLoading(false)
        console.log("response:",response.data.data._id);
-       dispatch(userId(response.data.data._id))
-       toast.success(response.data.message)
+       dispatch(userId(response?.data?.data?._id))
+       toast.success(response?.data?.message)
        Nav("/dashboard")
     })
     .catch(error =>{
       setLoading(false)
+      toast.error(error?.response?.data?.message)
       console.log("error:",error)
     })
   };

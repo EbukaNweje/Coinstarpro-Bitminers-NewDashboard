@@ -2,12 +2,75 @@ import {FaArrowLeftLong} from "react-icons/fa6";
 import {MdInfo} from "react-icons/md";
 import qr from "../../assets/qr.jpg";
 import {toast} from "react-toastify";
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { walletInfo } from "../../global/features";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const DepositPay = () => {
+    const Nav = useNavigate()
+    const {walletInfo, id} = useSelector((state) => state)
+    console.log(walletInfo, id)
+
+    const [laoding, setLoading] = useState(false)
+    const [userDatas, setUserDatas] = useState();
+    const [wallets, setWallets] = useState(null)
+    const [h, setH] = useState()
+    const [state, setState] = useState({
+        value: h,
+        copied: false,
+      });
+
+
+    //   wallets?.map((props)=> {walletInfo.wallet === props.walletName ? setH(props?.walletName) : "Loading...";})
+      
+console.log(h);
+
+      const handlegetallWalletAddress = async () => {
+        await axios.get('https://coinstarpro-bitminers-new-backnd.vercel.app/api/getallWalletAddress')
+            .then(response => {
+                 console.log("getwallet:",response?.data?.data);
+                 setWallets(response?.data?.data)
+                // dispatch(userData(response?.data.data));
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+    useEffect(() => {
+        wallets?.map((props)=> {walletInfo.wallet === props.walletName ? setH(props?.walletName) : "Loading...";})
+        console.log(state.value);
+        handlegetallWalletAddress()
+    }, [h])
+
+      const handleGetUser = async () => {
+        setLoading(true)
+        await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
+            .then(response => {
+                setLoading(false)
+                 console.log(response?.data?.data);
+                setUserDatas(response?.data?.data);
+            })
+            .catch(error => {
+                setLoading(false)
+                console.log(error);
+            });
+    };
+    
+
+    useEffect(() => {
+     if (id) {
+        handleGetUser();
+     }
+    }, [id])
+    
+    
     return (
         <div className="w-full h-max flex bg-[#f5f6fa] px-48 phone:gap-6 phone:px-6 phone:flex-col py-4">
             <div className="w-full h-max flex flex-col items-center gap-2">
-                <div className="w-full h-max flex items-center gap-2 text-lg cursor-pointer">
+                <div className="w-full h-max flex items-center gap-2 text-lg cursor-pointer" onClick={() =>Nav(-1)} >
                     <FaArrowLeftLong />
                     <p>History</p>
                 </div>
@@ -29,19 +92,25 @@ const DepositPay = () => {
                     </div>
                     <div className="w-full h-max flex flex-col border-t border-t-gray-300 p-4">
                         <div className="w-full flex flex-col gap-2">
-                            <p>Payment Address*</p>
+                            <p>{walletInfo?.wallet} Payment Address*</p>
                             <input
-                                type="text"
-                                readOnly
-                                className="w-full h-10 bg-[#f5f6fa] outline-none rounded border-gray-300 border pl-3"
-                                value={
-                                    "bc1qq22tmtclwnk06uwp4ujpjzqavaj3h5ru7qy5s7"
+                                    type="text"
+                                    value={state.value}
+                                    readOnly
+                                    className="w-full h-10 bg-[#f5f6fa] outline-none rounded border-gray-300 border pl-3"
+                                />
+                                <CopyToClipboard
+                                 text={state.value}
+                                 onCopy={() => setState({ copied: true })}
+                                 >
+                                <button className="w-max h-max px-2 py-2 rounded text-white bg-[#1ee0ac] font-semibold text-xs">
+                                {
+                                    state.copied ? "copied" : "Copy Wallet"
                                 }
-                            />
-                            <button className="w-max h-max px-2 py-2 rounded text-white bg-[#1ee0ac] font-semibold text-xs">
-                                Copy Wallet
-                            </button>
+                             </button>
+                                 </CopyToClipboard>
                         </div>
+                       
                         <div className="w-full flex flex-col gap-2">
                             <p>Amount *</p>
                             <input
@@ -49,7 +118,7 @@ const DepositPay = () => {
                                 readOnly
                                 className="w-full h-10 bg-[#f5f6fa] outline-none rounded border-gray-300 border pl-3"
                                 value={
-                                    "bc1qq22tmtclwnk06uwp4ujpjzqavaj3h5ru7qy5s7"
+                                     `$${walletInfo?.amount}`
                                 }
                             />
                         </div>
@@ -60,7 +129,7 @@ const DepositPay = () => {
                                 readOnly
                                 className="w-full h-10 bg-[#f5f6fa] outline-none rounded border-gray-300 border pl-3"
                                 value={
-                                    "bc1qq22tmtclwnk06uwp4ujpjzqavaj3h5ru7qy5s7"
+                                    walletInfo?.roundedNumber
                                 }
                             />
                         </div>
@@ -71,34 +140,48 @@ const DepositPay = () => {
                                 Payment Processor
                             </p>
                             <p className="w-[30%] h-max flex flex-col text-[#526484]">
-                                Blockchain
+                           { walletInfo?.wallet}
                             </p>
                         </div>
                     </div>
                     <div className="w-full h-max flex border-t border-t-gray-300 p-4">
                         <div className="w-full h-max flex flex-col gap-2">
                             <div className="w-full h-max text-lg text-[#364a63] font-semibold">
-                                Your Investment Details
+                                Your Deposit Details
                             </div>
-                            <div className="w-full h-max flex justify-between ">
-                                <p className="w-full h-max flex flex-col text-xs gap-1 text-[#8094ae]">
-                                    Name Of Plan{" "}
+                            <div 
+                            style={{display: "flex", flexWrap: "wrap"}}
+                            className="w-full h-max gap-2">
+                                <p className="w-[45%] h-max flex flex-col text-xs gap-1 text-[#8094ae]">
+                                    Wallet Name{" "}
                                     <span className="text-[#526484] text-sm">
-                                        GOLD PLAN
+                                        {walletInfo?.wallet}
                                     </span>
                                 </p>
-                                <p className="w-full h-max flex flex-col text-xs gap-1 text-[#8094ae]">
-                                    Duration
+                                <p className="w-[45%] h-max flex flex-col text-xs gap-1 text-[#8094ae]">
+                                    Deposited Amount
                                     <span className="text-[#526484] text-sm">
-                                        GOLD PLAN
+                                    ${walletInfo?.amount}
                                     </span>
                                 </p>
-                            </div>
-                            <div className="w-full h-max flex justify-between">
-                                <p className="w-full h-max flex flex-col text-xs gap-1 text-[#8094ae]">
-                                    Profit
+                                <p className="w-[45%] h-max flex flex-col text-xs gap-1 text-[#8094ae]">
+                                    Depositor Name
                                     <span className="text-[#526484] text-sm">
-                                        525%
+                                    {userDatas?.firstName}  {userDatas?.lastName}
+                                    </span>
+                                </p>
+                               
+                                <p className="w-[45%] h-max flex flex-col text-xs gap-1 text-[#8094ae]">
+                                    Fees
+                                    <span className="text-[#526484] text-sm">
+                                    $50
+                                    </span>
+                                </p>
+                    
+                                <p className="w-[45%] h-max flex flex-col text-xs gap-1 text-[#8094ae]">
+                                Bitcoin Equivalence
+                                    <span className="text-[#526484] text-sm">
+                                    { walletInfo?.roundedNumber}
                                     </span>
                                 </p>
                             </div>

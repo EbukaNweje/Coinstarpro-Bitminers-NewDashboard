@@ -8,26 +8,31 @@ import {IoLink, IoOpenOutline} from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { userData } from "../../global/features";
+import { ClipLoader } from "react-spinners";
 
 const DashboardHome = () => {
     const [userDatas, setUserDatas] = useState({});
     const [exchangeRate, setExchangeRate] = useState(null);
+    const [loading, setLoading] = useState(false)
 
     const dispatch = useDispatch()
     const Nav = useNavigate()
 
-    const id = useSelector((state)=> state.id)
+    const id = useSelector((state)=> state?.id)
     console.log(id);
 
     const handleGetUser = async () => {
+        setLoading(true)
         await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
             .then(response => {
+                setLoading(false)
                  console.log(response?.data?.data);
                 setUserDatas(response?.data?.data);
                 // dispatch(userData(response?.data.data));
                 // localStorage.setItem("UserId", response?.data);
             })
             .catch(error => {
+                setLoading(false)
                 console.log(error);
             });
     };
@@ -43,11 +48,10 @@ const DashboardHome = () => {
     const totalTradingBalance =  userDatas.totalWithdrawal + userDatas.tradingAccounts    
 
     useEffect(() => {
-        // Fetch the current exchange rate from an API (replace with a reliable API)
         axios
             .get("https://api.coindesk.com/v1/bpi/currentprice.json")
             .then((response) => {
-                const rate = response.data.bpi.USD.rate.replace(",", ""); // assuming USD rate
+                const rate = response?.data?.bpi?.USD?.rate.replace(",", ""); // assuming USD rate
                 setExchangeRate(parseFloat(rate));
             })
             .catch((error) => {
@@ -77,7 +81,7 @@ const DashboardHome = () => {
                     <p>Welcome!</p>
                     <div className="w-max phone:w-full flex phone:flex-col phone:items-start phone:gap-4 items-center gap-8">
                         <p className="text-4xl phone:w-full font-semibold text-[rgb(54,74,99)] truncate">
-                            {userDatas?.firstName} {userDatas?.lastName} {userDatas?.userName}
+                        { loading ? <ClipLoader color='white' /> :  `${userDatas?.firstName} ${userDatas?.lastName} ${userDatas?.userName}`}
                         </p>
                         <div className="w-max h-max py-2 rounded bg-white border border-gray-300 text-sm font-semibold px-3 flex items-center justify-center gap-2">
                             <p>My Plans</p>
@@ -110,7 +114,7 @@ const DashboardHome = () => {
                                 </span>
                             </p>
                             <p className="w-full flex items-center justify-between text-3xl text-white">
-                                ${userDatas?.accountBalance}
+                                { loading ? <ClipLoader color='white' /> :  `$${userDatas?.accountBalance}`}
                                 <span className="text-[#1ee0ac] text-sm">
                                { roundedNumber}
                                 </span>
@@ -126,7 +130,7 @@ const DashboardHome = () => {
                                 </span>
                             </p>
                             <p className="w-full flex items-center justify-between text-3xl text-white">
-                                ${userDatas?.totalInvestment}
+                                { loading ? <ClipLoader color='white' /> :  `$${userDatas?.totalInvestment}`}
                                 <span className="text-[#1ee0ac] text-sm">
                                     {roundedNumber7}
                                 </span>
@@ -142,7 +146,7 @@ const DashboardHome = () => {
                                 </span>
                             </p>
                             <p className="w-full flex items-center justify-between text-3xl text-white">
-                                ${userDatas?.totalProfit}
+                                { loading ? <ClipLoader color='white' /> :  `$${userDatas?.totalProfit}`}
                                 <span className="text-[#1ee0ac] text-sm">
                                     {roundedNumber2}
                                 </span>
@@ -162,14 +166,14 @@ const DashboardHome = () => {
                         </div>
                         <div className="w-full h-max flex flex-col gap-2 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
                             <p className="w-full h-max flex justify-between">
-                                Available Funds <span>${userDatas?.accountBalance}</span>
+                                Available Funds <span>{ loading ? <ClipLoader color='white' /> :  `$${userDatas?.accountBalance}`}</span>
                             </p>
                             <p className="w-full h-max flex justify-between">
-                                Available Profits <span>${userDatas?.totalProfit}</span>
+                                Available Profits <span> { loading ? <ClipLoader color='white' /> :  `$${userDatas?.totalProfit}`}</span>
                             </p>
                             <div className="w-full h-max flex justify-between border-t border-t-gray-300 font-semibold text-black py-2">
                                 <p>Total</p>
-                                <p>${totalBalance}</p>
+                                <p>{ loading ? <ClipLoader color='white' /> :  `$${totalBalance}`}</p>
                             </div>
                         </div>
                     </div>
@@ -186,7 +190,7 @@ const DashboardHome = () => {
                         <div className="w-full h-max flex flex-col gap-2">
                             <p className="text-[#8094ae]">Confirmed Deposits</p>
                             <p className="w-full flex items-center justify-between text-3xl text-[#526484]">
-                                ${userDatas?.totalDeposit }
+                                { loading ? <ClipLoader color='white' /> :  `$${userDatas?.totalDeposit }`}
                             </p>
                         </div>
                         <div className="w-full h-max flex flex-col gap-2 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
@@ -197,10 +201,10 @@ const DashboardHome = () => {
                                 Pending Withdrawal <span>$10.00</span>
                             </p> */}
                             <p className="w-full h-max flex justify-between">
-                                Bonus <span>${userDatas?.bonus}</span>
+                                Bonus <span>{ loading ? <ClipLoader color='white' /> :  `$ ${userDatas?.bonus}`}  </span>
                             </p>
                             <p className="w-full h-max flex justify-between">
-                                Referral Bonus <span>${userDatas?.ref}</span>
+                                Referral Bonus <span>{ loading ? <ClipLoader color='white' /> :  `$${userDatas?.ref}`} </span>
                             </p>
                         </div>
                     </div>
