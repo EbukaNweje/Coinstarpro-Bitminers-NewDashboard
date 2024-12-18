@@ -1,11 +1,94 @@
 import {Modal} from "antd";
-import {useState} from "react";
+import axios from "axios";
+import {useEffect, useState} from "react";
 import {FaChevronRight, FaUser} from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { ClipLoader } from "react-spinners";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const Profile = () => {
     const [openProfile, setOpenProfile] = useState(false);
     const [openWallet, setOpenWallet] = useState(false);
     const [openPassword, setopenPassword] = useState(false);
+    const [laoding, setLoading] = useState(false)
+    const [userDatas, setUserDatas] = useState();
+
+    const User = z
+    .object({
+      firstName: z.string().min(1, { message: "First Name is required" }),
+      lastName: z.string().min(1, { message: "Last Name is required" }),
+      userName: z.string().min(1, { message: "User Name is required" }),
+      email: z.string().email({ message: "Must be a valid email" }),
+      phoneNumber: z
+        .string()
+        .min(10, { message: "Phone number must be at least 10 digits" })
+        .regex(/^\d+$/, { message: "Phone number must contain only digits" }),
+      country: z.string().min(1, { message: "Country is required" }),
+    });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(User),
+  });
+
+  const Onsubmit = async (data, e) => {
+    e.preventDefault(); 
+    // setLoading(true)
+    // const url = 'https://coinstarpro-bitminers-new-backnd.vercel.app/api/register'
+    // const FormData ={
+    //   password: data.password,
+    //   email: data.email,
+    //   firstName: data.firstName,
+    //   lastName: data.lastName,
+    //   userName:  data.userName,
+    //   phoneNumber: data.phoneNumber,
+    //   country: data.country,
+    // }
+    //  await axios.post(url, FormData)
+    // .then(response=>{
+    //   setLoading(false)
+    //    console.log("response:",response.data.data._id);
+    //    dispatch(userId(response.data.data._id))
+    //    toast.success(response.data.message)
+    //    Nav("/dashboard")
+    // })
+    // .catch(error =>{
+    //   setLoading(false)
+    //   console.log("error:",error)
+    // })
+  };
+
+    
+    const id = useSelector((state)=> state.id)
+    console.log(id);
+
+    const handleGetUser = async () => {
+        setLoading(true)
+        await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
+            .then(response => {
+                setLoading(false)
+                 console.log(response?.data?.data);
+                setUserDatas(response?.data?.data);
+                // dispatch(userData(response?.data.data));
+                // localStorage.setItem("UserId", response?.data);
+            })
+            .catch(error => {
+                setLoading(false)
+                console.log(error);
+            });
+    };
+    console.log(userDatas);
+  
+    useEffect(() => {
+        if (id) {
+            handleGetUser();
+        }
+    }, [id]);
 
     return (
         <>
@@ -44,7 +127,7 @@ const Profile = () => {
                             <div className="w-[60%] phone:w-max h-max flex phone:flex-col justify-between items-center phone:items-start">
                                 <p className="text-[#8094ae]">Full Name</p>
                                 <p className="text-[#364a63]">
-                                    Freya Conner Hamilton Clark
+                                { laoding ? <ClipLoader color='white' /> :  `${userDatas?.firstName} ${userDatas?.lastName} ${userDatas?.userName}`}
                                 </p>
                             </div>
                             <div className="w-[40%] phone:w-max h-max flex items-center justify-end">
@@ -55,7 +138,7 @@ const Profile = () => {
                             <div className="w-[60%] phone:w-max h-max flex phone:flex-col justify-between items-center phone:items-start">
                                 <p className="text-[#8094ae]">Email</p>
                                 <p className="text-[#364a63]">
-                                    businesscocoltd@gmail.com
+                                { laoding ? <ClipLoader color='white' /> :  `${userDatas?.email}`}
                                 </p>
                             </div>
                             <div className="w-[40%] phone:w-max h-max flex items-center justify-end">
@@ -64,9 +147,9 @@ const Profile = () => {
                         </div>
                         <div className="w-full h-max flex items-center justify-between px-4 py-6 cursor-pointer border-b border-b-gray-300">
                             <div className="w-[60%] phone:w-max h-max flex phone:flex-col justify-between items-center phone:items-start">
-                                <p className="text-[#8094ae]"> Dateof birth</p>
+                                <p className="text-[#8094ae]"> phoneNumber</p>
                                 <p className="text-[#364a63]">
-                                    +1 (516) 344-2712
+                                { laoding ? <ClipLoader color='white' /> :  `${userDatas?.phoneNumber}`}
                                 </p>
                             </div>
                             <div className="w-[40%] phone:w-max h-max flex items-center justify-end">
@@ -75,9 +158,9 @@ const Profile = () => {
                         </div>
                         <div className="w-full h-max flex items-center justify-between px-4 py-6 cursor-pointer border-b border-b-gray-300">
                             <div className="w-[60%] phone:w-max h-max flex phone:flex-col justify-between items-center phone:items-start">
-                                <p className="text-[#8094ae]">Date of birth</p>
+                                <p className="text-[#8094ae]">userName</p>
                                 <p className="text-[#364a63]">
-                                    Update date of birth
+                                { laoding ? <ClipLoader color='white' /> :  `${userDatas?.userName}`}
                                 </p>
                             </div>
                             <div className="w-[40%] phone:w-max h-max flex items-center justify-end">
@@ -86,8 +169,8 @@ const Profile = () => {
                         </div>
                         <div className="w-full h-max flex items-center justify-between px-4 py-6 cursor-pointer ">
                             <div className="w-[60%] phone:w-max h-max flex phone:flex-col justify-between items-center phone:items-start">
-                                <p className="text-[#8094ae]"> Address</p>
-                                <p className="text-[#364a63]">Update Address</p>
+                                <p className="text-[#8094ae]"> country</p>
+                                <p className="text-[#364a63]">{ laoding ? <ClipLoader color='white' /> :  `${userDatas?.country}`}</p>
                             </div>
                             <div className="w-[40%] phone:w-max h-max flex items-center justify-end">
                                 <FaChevronRight size={22} />
@@ -140,7 +223,7 @@ const Profile = () => {
                             </div>
                             <div className="w-max h-max flex items-center justify-end gap-2 phone:flex-col phone:items-start">
                                 <p className="text-[#a286f4] text-sm italic">
-                                    Last changed: 2024-08-23 12:48:36
+                                { laoding ? <ClipLoader color='white' /> :  `${userDatas?.updatedAt}`} 
                                 </p>
                                 <button
                                     className="w-max h-max px-4 py-2 rounded font-semibold text-white text-xs bg-[#a286f4] cursor-pointer"
@@ -164,7 +247,7 @@ const Profile = () => {
                 closeIcon={true}
                 className="w-[45%] phone:w-full phone:p-0"
             >
-                <div className="w-full h-max flex flex-col gap-2 p-2">
+                <form onSubmit={handleSubmit(Onsubmit)} className="w-full h-max flex flex-col gap-2 p-2">
                     <p className="w-max h-max flex flex-col text-lg font-semibold text-[#364a63]">
                         Update Profile{" "}
                         <span className="text-sm font-normal text-[#526484]">
@@ -178,14 +261,18 @@ const Profile = () => {
                                 <input
                                     type="text"
                                     className="w-full h-10 rounded border border-gray-300 outline-none pl-2"
+                                    {...register("firstName")}
                                 />
+                                {errors?.firstName && <span style={{ color: "red" }}>{errors.firstName.message}</span>}
                             </div>
                             <div className="w-1/2 h-max flex flex-col">
                                 <p className=" text-[#364a63]">Last Name</p>
                                 <input
                                     type="text"
                                     className="w-full h-10 rounded border border-gray-300 outline-none pl-2"
+                                    {...register("lastName")}
                                 />
+                             {errors?.lastName && <span style={{ color: "red" }}>{errors.lastName.message}</span>}
                             </div>
                         </div>
                         <div className="w-full h-max flex justify-between gap-5">
@@ -194,7 +281,9 @@ const Profile = () => {
                                 <input
                                     type="text"
                                     className="w-full h-10 rounded border border-gray-300 outline-none pl-2"
+                                    {...register("phoneNumber")}
                                 />
+                                {errors?.phoneNumber && <span style={{ color: "red" }}>{errors.phoneNumber.message}</span>}
                             </div>
                             <div className="w-1/2 h-max flex flex-col">
                                 <p className=" text-[#364a63]">Date of Birth</p>
@@ -242,10 +331,12 @@ const Profile = () => {
                                 <select
                                     type="text"
                                     className="w-full h-10 rounded border border-gray-300 outline-none pl-2"
+                                    {...register("country")}
                                 >
                                     <option value="">Select Country</option>
                                     <option value="">Select Country</option>
                                 </select>
+                                {errors?.country && <span style={{ color: "red" }}>{errors.country.message}</span>}
                             </div>
                         </div>
                     </div>
@@ -253,11 +344,11 @@ const Profile = () => {
                         <button className="w-max h-max px-6 py-2 font-semibold text-white bg-[#364a63] rounded">
                             CANCEL
                         </button>
-                        <button className="w-max h-max px-6 py-2 font-semibold text-white bg-[#a286f4] rounded">
+                        <button type="submit" className="w-max h-max px-6 py-2 font-semibold text-white bg-[#a286f4] rounded">
                             UPDATE
                         </button>
                     </div>
-                </div>
+                </form>
             </Modal>
             <Modal
                 open={openWallet}

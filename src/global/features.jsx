@@ -3,7 +3,8 @@ import {createSlice} from "@reduxjs/toolkit";
 const initialState = {
     user: {},
     userToken: "",
-   
+    id: "",
+    walletInfo: {}
 };
 
 const features = createSlice({
@@ -14,7 +15,15 @@ const features = createSlice({
             state.user = payload;
             console.log("User Data:", payload);
         },
-        
+        userId: (state, {payload}) => {
+            state.id = payload;
+            console.log("User id:", payload);
+        },
+        walletInfo: (state, { payload }) => {
+            state.walletInfo = payload
+            console.log("Wallet Info:", state.walletInfo);
+        },
+
         loginToken: (state, {payload}) => {
             state.userToken = payload;
             console.log("User Token:", payload);
@@ -28,7 +37,7 @@ const features = createSlice({
     },
 });
 
-export const {userData, logout, loginToken} =
+export const {userData, userId, walletInfo, logout, loginToken} =
     features.actions;
 
 export default features.reducer;

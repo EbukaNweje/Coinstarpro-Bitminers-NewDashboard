@@ -1,12 +1,17 @@
 import {FaInstagram, FaTelegram, FaTwitter} from "react-icons/fa";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-// import { toast, Toaster } from 'react-hot-toast';
+import { ClipLoader } from "react-spinners";
+import { useState } from "react";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Reset = () => {
+    const [loading, setLoading] = useState(false)
     const Nav = useNavigate();
+    const{ id, token }= useParams()
     const User = z.object({
         password: z
           .string()
@@ -30,9 +35,25 @@ const Reset = () => {
       });
     
       const Onsubmit = async (data) => {
-        console.log("Form submitted: ", data);
-        // toast.success("Password reset successful!");
-        Nav('/')
+            setLoading(true)
+            const url = `https://coinstarpro-bitminers-new-backnd.vercel.app/api/resetLink${id}/${token}`
+            const FormData ={
+            password: data.password,
+            confirmPassword: data.confirmPassword,
+            }
+            await axios.post(url, FormData)
+            .then(response=>{
+                setLoading(false)
+                console.log("response:",response);
+                toast.success(response.data.message);
+                    Nav('/')
+                
+             })
+             .catch(error=>{
+                setLoading(false)
+               console.log("error:",error)
+               toast.error(error.data.message);
+             })
       };
     return (
         <div className="w-full h-screen">
@@ -73,7 +94,9 @@ const Reset = () => {
                         type="submit"
                         className="w-40 h-12 bg-[#a286f4] text-white font-bold rounded hover:bg-white hover:border hover:border-[#a286f4] hover:text-[#a286f4]"
                     >
-                        Reset Password
+                           { loading ? <ClipLoader color='white' /> :
+                               "Reset Password" 
+                               } 
                     </button>
                     </div>
                     <div className="w-max phone:w-full phone:justify-between phone:gap-0 h-max flex gap-80 text-sm text-[#a286f4]">
@@ -83,7 +106,7 @@ const Reset = () => {
                             </div>
                         </NavLink>
                     </div>
-                    {/* <Toaster/> */}
+                    <Toaster/>
                 </form>
             </div>
             <div className="w-full phone:h-24 phone:gap-3 phone:flex-col phone:justify-center  phone:py-4 h-14 text-white px-48 flex items-center justify-between bg-[#0e1120]">

@@ -2,6 +2,7 @@ import {Outlet} from "react-router";
 import Header from "../../components/Header";
 
 const Dashboard = () => {
+    const currentYear = new Date().getFullYear();
     return (
         <>
             <div className="w-full h-max flex flex-col">
@@ -12,8 +13,8 @@ const Dashboard = () => {
                     <Outlet />
                 </div>
                 <div className="w-full h-16 bg-[#0f3951]">
-                    <p>Copyright 2023</p>
-                </div>
+                <p className="flex gap-5 items-center">&copy;  copyRights {currentYear}. All Rights Reserved</p>
+                 </div>
             </div>
         </>
     );

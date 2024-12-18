@@ -3,11 +3,18 @@ import {NavLink, useNavigate} from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { toast, Toaster } from 'react-hot-toast';
+import toast,{ Toaster } from 'react-hot-toast';
+import axios from "axios";
+import { userId } from "../../global/features";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { ClipLoader } from "react-spinners";
 
 const Login = () => {
 
 const Nav = useNavigate()
+const dispatch = useDispatch()
+const [loading, setLoading] = useState(false)
     
   const User = z.object({
     email: z.string().email({ message: 'Must be a valid email' }),
@@ -25,29 +32,28 @@ const Nav = useNavigate()
 
   const Onsubmit = async (data, e) => {
     console.log(data);
-    Nav('/dashboard')
-    
-    // e.preventDefault(); 
-    // const url = 'https://edutrack-jlln.onrender.com/api/v1/school/log-in'
-    // const FormData ={
-    //   email: data.email,
-    //   password: data.password,
-    // }
-    
-    //  await axios.post(url, FormData)
-    // .then( res => {
-    //  if (res.data.data.isVerified === true) {
-    //     Nav('/dashbord')
-    //     toast.success('login successfull')
-    //  }
-    //  else{
-    //   toast.error('Please Verify your email :)')
-    //   Nav('')
-    //  }
-    // })
-    // .catch( error => {
-    //   console.log(error);
-    // })
+    setLoading(true)
+    e.preventDefault(); 
+    const url = 'https://coinstarpro-bitminers-new-backnd.vercel.app/api/login'
+    const FormData ={
+      email: data.email,
+      password: data.password,
+    }
+     
+    await axios.post(url, FormData)
+    .then(response=>{
+      setLoading(false)
+       console.log("response:",response.data?._id);
+       dispatch(userId(response?.data?._id))
+       toast.success(response?.message)
+       Nav("/dashboard")
+    })
+    .catch(error =>{
+      setLoading(false)
+      toast.error(error?.response?.message)
+      console.log("error:",error)
+    })
+
   
   };
     return (
@@ -95,7 +101,10 @@ const Nav = useNavigate()
                         // onClick={() => Nav('/dashboard')}
                         className="w-40 h-12 rounded bg-[#a286f4] text-white text-sm font-bold transition-all duration-500 hover:bg-white hover:border-2 hover:text-[#a286f4] hover:border-[#a286f4]"
                     >
-                        LOG IN
+                         { loading ? <ClipLoader color='white' className="hover:bg-#a286f4" /> :
+                               " LOG IN" 
+                               } 
+                       
                     </button>
                     <div className="w-max phone:w-full phone:justify-between phone:gap-0 h-max flex gap-80 text-sm text-[#a286f4]">
                         <div className="w-max h-max cursor-pointer" onClick={() => Nav('forgotten-password')}>
@@ -120,7 +129,7 @@ const Nav = useNavigate()
                 </div>
             </div>
             <Toaster position="top-center" />
-        </div>
+            </div>
     );
 };
 

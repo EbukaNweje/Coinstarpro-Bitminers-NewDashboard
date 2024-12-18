@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {FaInstagram, FaTelegram, FaTwitter} from "react-icons/fa";
 import { useNavigate } from 'react-router';
 import { NavLink } from 'react-router-dom';
@@ -6,45 +6,44 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast, Toaster } from 'react-hot-toast';
+import axios from 'axios';
+import { ClipLoader } from 'react-spinners';
 
 
 const Forgottenpassword = () => {
     const Nav = useNavigate()
+    const [loading,setLoading] = useState(false)
 
     const User = z.object({
         email: z.string().email({ message: 'Must be a valid email' }),
-      });
-    
+    })
+
       const { register, handleSubmit, formState: { errors }, setError } = useForm({
         resolver: zodResolver(User),
       });
     
       const Onsubmit = async (data, e) => {
-        console.log(data);
-        Nav('/reset-password')        
         e.preventDefault(); 
-        // const url = 'https://edutrack-jlln.onrender.com/api/v1/school/log-in'
-        // const FormData ={
-        //   email: data.email,
-        //   password: data.password,
-        // }
-        
-        //  await axios.post(url, FormData)
-        // .then( res => {
-        //  if (res.data.data.isVerified === true) {
-        //     Nav('/dashbord')
-        //     toast.success('login successfull')
-        //  }
-        //  else{
-        //   toast.error('Please Verify your email :)')
-        //   Nav('')
-        //  }
-        // })
-        // .catch( error => {
-        //   console.log(error);
-        // })
-      
-      };
+        setLoading(true)
+        const url = 'https://coinstarpro-bitminers-new-backnd.vercel.app/api/forgot-password'
+        const FormData ={
+            email: data.email
+        }
+        console.log(FormData);
+        await axios.post(url, FormData)
+        .then( res =>{
+            setLoading(false)
+            console.log(res);
+            toast.success(res.data.message) 
+            Nav('/reset-password')
+        })
+        .catch( Error => {
+            setLoading(false)
+            console.log(Error);
+            toast.error(Error.response.message)
+        })
+      }
+
     
     return (
         <div className="w-full h-screen">
@@ -86,7 +85,8 @@ const Forgottenpassword = () => {
                     <div className="w-max phone:w-full phone:justify-between phone:gap-0 h-max flex gap-80 text-sm text-[#a286f4]">
                         <NavLink to={"/register"}>
                             <div className="w-max h-max cursor-pointer">
-                                Create Account
+                           { loading ? <ClipLoader color='white' /> :
+                               " Create Account"}
                             </div>
                         </NavLink>
                     </div>
@@ -102,6 +102,7 @@ const Forgottenpassword = () => {
                     <FaInstagram />
                 </div>
             </div>
+            <Toaster position='top-center'/>
         </div>
     );
 }

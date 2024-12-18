@@ -1,23 +1,97 @@
 import {Modal} from "antd";
-import {useState} from "react";
+import axios from "axios";
+import {useEffect, useState} from "react";
+import toast, { Toaster } from "react-hot-toast";
 import {FaArrowLeftLong} from "react-icons/fa6";
 import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useDispatch } from "react-redux";
+import { walletInfo } from "../../global/features";
 // import {toast} from "react-toastify";
 
 const Deposit = () => {
   const navigate = useNavigate()
-    const [openModal, setOpenModal] = useState(false);
-    const handleProceed = () => {
-      navigate("/dashboard/deposit-pay");
-  };
+  const dispacth = useDispatch()
+  const [amount, setAmount] = useState(0.00)
+  const [wallet, setWallet] = useState("Bitcoin")
+  const [exchangeRate, setExchangeRate] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [wallets, setWallets] = useState(null)
+
+   const User = z
+      .object({ check: z.boolean().refine((val) => val === true, {
+          message: "You must accept the terms and conditions",
+        }),
+    })
+
+     const {
+        register,
+        handleSubmit,
+        formState: { errors },
+      } = useForm({
+        resolver: zodResolver(User),
+      });
+
+  const handleOpenModal = handleSubmit(() => {
+    if (amount !== 0.00 && wallet !== "") {
+        setOpenModal(true);
+    } else {
+        toast.error("Wallet and amount are required");
+    }
+});
+
+  const handleAmount = (e) =>{
+    setAmount(e.target.value)
+  }
+
+  const handleWallet = (e) =>{
+    setWallet(e.target.value)
+  }
+
+  useEffect(() => {
+    axios
+        .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+        .then((response) => {
+            const rate = response.data.bpi.USD.rate.replace(",", ""); // assuming USD rate
+            setExchangeRate(parseFloat(rate));
+        })
+        .catch((error) => {
+            console.error("Error fetching exchange rate:", error);
+        });
+}, []); 
+
+const bitcoinValue = amount / exchangeRate;
+const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
+
+const handleProceed = () => {
+    dispacth(walletInfo({amount, wallet, roundedNumber}))
+  navigate("/dashboard/deposit-pay");
+};
+
+const handlegetallWalletAddress = async () => {
+    await axios.get('https://coinstarpro-bitminers-new-backnd.vercel.app/api/getallWalletAddress')
+        .then(response => {
+             console.log("getwallet:",response?.data?.data);
+             setWallets(response?.data?.data)
+            // dispatch(userData(response?.data.data));
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+useEffect(() => {
+    handlegetallWalletAddress()
+}, [])
 
   const Nav = useNavigate()
     return (
         <div className="w-full h-max flex bg-[#f5f6fa] px-48 phone:gap-6 phone:px-6 phone:flex-col py-4">
             <div className="w-[60%] phone:w-full h-max flex flex-col gap-2">
-                <div className="w-max h-max flex items-center gap-2 text-lg cursor-pointer" onClick={()=> Nav(-1)}>
-                    <FaArrowLeftLong onClick={()=> Nav(-1)}/>
-                    <p>Back to plan</p>
+                <div className="w-max h-max flex items-center gap-2 text-lg cursor-pointer" onClick={()=> Nav("dashboard")}>
+                    <FaArrowLeftLong onClick={()=> Nav('dashboard')}/>
+                    <p  onClick={()=> Nav('dashboard')}>Back to plan</p>
                 </div>
                 <p className="text-4xl font-semibold text-[#364a63]">
                     Ready to get started?
@@ -28,20 +102,24 @@ const Deposit = () => {
                         <select
                             name=""
                             id=""
+                            onChange={handleWallet}
                             className="w-full h-14 border border-gray-300 rounded px-4 py-2"
                         >
-                            <option value="">Bitcoin</option>
-                            <option value="">Ethereum</option>
-                            <option value="">USDTC(TRC20)</option>
+                            {
+                                wallets?.map((props, index)=>(
+                                    <option value={props.walletName} key={index}>{props.walletName}</option>
+                                ))
+                            }
                         </select>
                     </div>
                     <div className="w-full h-max flex flex-col gap-2">
                         <p className="text-sm">Enter your amount</p>
                         <div className="w-full h-14 flex items-center border border-gray-300 rounded px-4 py-2 bg-white">
                             <input
-                                type="text"
+                                type="Number"
                                 className="w-[90%] border-r border-r-gray-200 h-full rounded-l outline-none "
                                 placeholder="100000"
+                                onChange={handleAmount}
                             />
                             <p className="w-[10%] h-full flex items-center justify-center">
                                 USD
@@ -49,10 +127,10 @@ const Deposit = () => {
                         </div>
                     </div>
                     <div className="w-max h-max text-xs flex items-center">
-                        <p className="w-max h-max text-xs flex items-center text-[#8094ae]">
-                            Note: Minimum invest $ <span>100,000.00</span>{" "}
+                        {/* <p className="w-max h-max text-xs flex items-center text-[#8094ae]">
+                            Note: Minimum deposit $ <span>100,000.00</span>{" "}
                             &nbsp; and up to &nbsp; $ <span>1,000,000.00</span>
-                        </p>
+                        </p> */}
                     </div>
                     <div className="w-full h-max flex items-center">
                         <input
@@ -60,10 +138,13 @@ const Deposit = () => {
                             name=""
                             className="w-6 h-6"
                             id=""
+                            required
+                            {...register("check")}
                         />
                         <p className="ml-2 text-sm">
                             I agree to the terms and conditions
                         </p>
+                        {errors?.check && <span style={{ color: "red" }}>{errors.check.message}</span>}
                     </div>
                 </div>
             </div>
@@ -73,25 +154,12 @@ const Deposit = () => {
                         <div className="w-full h-max text-lg text-[#364a63] font-semibold">
                             Your Investment Details
                         </div>
-                        <div className="w-full h-max flex justify-between ">
-                            <p className="w-full h-max flex flex-col text-xs gap-1 text-[#8094ae]">
-                                Name Of Plan{" "}
-                                <span className="text-[#526484] text-sm">
-                                    GOLD PLAN
-                                </span>
-                            </p>
-                            <p className="w-full h-max flex flex-col text-xs gap-1 text-[#8094ae]">
-                                Duration
-                                <span className="text-[#526484] text-sm">
-                                    GOLD PLAN
-                                </span>
-                            </p>
-                        </div>
+                        
                         <div className="w-full h-max flex justify-between">
                             <p className="w-full h-max flex flex-col text-xs gap-1 text-[#8094ae]">
-                                Profit
+                                Fees
                                 <span className="text-[#526484] text-sm">
-                                    525%
+                                    $50
                                 </span>
                             </p>
                         </div>
@@ -101,31 +169,31 @@ const Deposit = () => {
                             Payment Processor
                         </p>
                         <p className="w-[30%] h-max flex flex-col text-[#526484]">
-                            Blockchain
+                            {wallet}
                         </p>
                     </div>
                     <div className="w-full h-max flex flex-col  p-6 border-b border-b-gray-300  gap-2">
                         <div className="w-full h-max flex justify-between">
                             <p className="w-[70%] text-xs h-max flex flex-col text-[#8094ae]">
-                                Min Amount
+                                 Amount
                             </p>
                             <p className="w-[30%] h-max flex flex-col text-[#526484]">
-                                1,000,000.00
+                            $ {amount}
                             </p>
                         </div>
-                        <div className="w-full h-max flex justify-between">
+                        {/* <div className="w-full h-max flex justify-between">
                             <p className="w-[70%] text-xs h-max flex flex-col text-[#8094ae]">
                                 Min Amount
                             </p>
                             <p className="w-[30%] h-max flex flex-col text-[#526484]">
                                 1,000,000.00
                             </p>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="w-full h-20 flex items-center justify-center bg-[#f5f6fa]">
                         <button
                             className="w-max h-max px-5 py-2 rounded text-white font-semibold bg-[#a286f4]"
-                            onClick={() => setOpenModal(true)}
+                            onClick={handleOpenModal}
                         >
                             Confirm & Withdrawal
                         </button>
@@ -143,8 +211,8 @@ const Deposit = () => {
                 <div className="w-full h-max flex flex-col items-center justify-center gap-4 p-4">
                     <p>Confirm Your Payment</p>
                     <p className="w-full text-center ">
-                        This is to confirm your payment of $100000.00 (1.581397
-                        BTC) using Bitcoin Payment. Please cancel if you did not
+                        This is to confirm your payment of ${amount} ({roundedNumber}
+                        BTC) using {wallet} Payment. Please cancel if you did not
                         initiate the transaction.
                     </p>
                     <button
@@ -155,7 +223,7 @@ const Deposit = () => {
                     </button>
                     <p className="w-full text-center ">
                         This transaction will appear on your wallet statement as
-                        GOLD PLAN Investment.
+                         Deposit.
                     </p>
                     <button
                         className="w-max h-max px-5 py-2 rounded border border-[#a286f4] font-semibold text-[#a286f4]"
@@ -165,6 +233,7 @@ const Deposit = () => {
                     </button>
                 </div>
             </Modal>
+            <Toaster position ="top-center"/>
         </div>
     );
 };

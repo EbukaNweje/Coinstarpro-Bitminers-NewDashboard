@@ -3,16 +3,25 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {  userId } from "../../global/features";
 
 const Signup = () => {
+  const [loading, setLoading] = useState(false)
+
     const Nav = useNavigate()
+  const dispatch = useDispatch()
   const User = z
     .object({
       firstName: z.string().min(1, { message: "First Name is required" }),
       lastName: z.string().min(1, { message: "Last Name is required" }),
       userName: z.string().min(1, { message: "User Name is required" }),
       email: z.string().email({ message: "Must be a valid email" }),
-      phone: z
+      phoneNumber: z
         .string()
         .min(10, { message: "Phone number must be at least 10 digits" })
         .regex(/^\d+$/, { message: "Phone number must contain only digits" }),
@@ -44,9 +53,32 @@ const Signup = () => {
     resolver: zodResolver(User),
   });
 
-  const Onsubmit = async (data) => {
-    Nav('/')
-    console.log(data);
+  const Onsubmit = async (data, e) => {
+    e.preventDefault(); 
+    setLoading(true)
+    const url = 'https://coinstarpro-bitminers-new-backnd.vercel.app/api/register'
+    const FormData ={
+      password: data.password,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      userName:  data.userName,
+      phoneNumber: data.phoneNumber,
+      country: data.country,
+    }
+     await axios.post(url, FormData)
+    .then(response=>{
+      setLoading(false)
+       console.log("response:",response.data.data._id);
+       dispatch(userId(response?.data?.data?._id))
+       toast.success(response?.data?.message)
+       Nav("/dashboard")
+    })
+    .catch(error =>{
+      setLoading(false)
+      toast.error(error?.response?.data?.message)
+      console.log("error:",error)
+    })
   };
 
   return (
@@ -106,9 +138,9 @@ const Signup = () => {
             type="text"
             className="w-[33rem] phone:w-full h-12 rounded border border-gray-100 bg-[#f8f8f8] outline-none pl-4"
             placeholder="Phone *"
-            {...register("phone")}
+            {...register("phoneNumber")}
           />
-          {errors?.phone && <span style={{ color: "red" }}>{errors.phone.message}</span>}
+          {errors?.phoneNumber && <span style={{ color: "red" }}>{errors.phoneNumber.message}</span>}
 
           <select
             className="w-[33rem] phone:w-full h-12 rounded border border-gray-100 bg-[#f8f8f8] outline-none pl-4"
@@ -196,7 +228,9 @@ const Signup = () => {
             type="submit"
             className="w-40 h-12 rounded bg-[#8865f0] text-white text-sm font-bold transition-all duration-500 hover:bg-white hover:border-2 hover:text-[#a286f4] hover:border-[#a286f4]"
           >
-            Register
+            { loading ? <ClipLoader color='white' /> :
+                               "Register" 
+                               } 
           </button>
 
           <div className="w-max phone:w-full phone:justify-between phone:gap-0 h-max flex gap-20 text-sm text-[#a286f4]">
@@ -217,6 +251,7 @@ const Signup = () => {
           <FaInstagram />
         </div>
       </div>
+      <Toaster position="top"/>
     </div>
   );
 };
