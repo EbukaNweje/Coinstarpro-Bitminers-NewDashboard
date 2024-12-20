@@ -5,7 +5,7 @@ const Referral = () => {
                 Referral List
                 <span className="text-sm font-normal text-[#526484] ">
                     You can refer users by sharing your referral link:
-                    https://ap.crypto-crest.com/ref/boduxi
+                    https://ap.ininvestohub.com/ref/boduxi
                 </span>
             </p>
             <div className="w-full h-max flex flex-col p-4 bg-white rounded border border-gray-300 gap-2">

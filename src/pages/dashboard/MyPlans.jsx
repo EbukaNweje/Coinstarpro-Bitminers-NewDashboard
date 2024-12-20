@@ -1,234 +1,124 @@
-import {useState} from "react";
-import {FaCheckCircle} from "react-icons/fa";
-import {FaArrowRightLong} from "react-icons/fa6";
-import {useNavigate} from "react-router";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { FaCheckCircle } from "react-icons/fa";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const MyPlans = () => {
     const navigate = useNavigate();
-    const [plan, setPlan] = useState(0);
-    // const planData = {
-    //     plan1: 1000,
-    //     plan2: 5000,
-    //     plan3: 10000,
-    // };
+    const id = useSelector((state) => state?.id); 
+    const [plan, setPlan] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [userDatas, setUserDatas] = useState([]);
+
     const handleProceed = () => {
         navigate("/dashboard/deposit");
     };
+
+    const handleGetAllPlans = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(
+                'https://coinstarpro-bitminers-new-backnd.vercel.app/api/getallplan'
+            );
+            console.log(response.data.data);
+            
+            setUserDatas(response.data.data || []);
+        } catch (error) {
+            console.error("Error fetching plans:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (id) {
+            handleGetAllPlans();
+        }
+    }, [id]);
+
     return (
         <div className="w-full h-max flex px-48 phone:px-6 phone:gap-2 flex-col gap-6 py-10 items-center text-[#8094ae]">
             <p>Choose an option</p>
-            <p className="text-[#364a63] text-3xl font-semibold">
-                Pricing/Plans
-            </p>
+            <p className="text-[#364a63] text-3xl font-semibold">Pricing/Plans</p>
             <p className="text-sm text-[#526484]">
                 Choose your investment plan and start earning.
             </p>
-            <div className="w-full flex phone:flex-col justify-between h-max gap-8">
-                <div className="w-1/3 phone:flex-col phone:w-full phone:h-max h-max bg-white flex p-10 border flex-col justify-between gap-4 border-gray-300 rounded relative">
-                    {plan === 1 && (
-                        <span className="w-max h-max absolute top-4 right-4">
-                            <FaCheckCircle
-                                className=""
-                                size={24}
-                                color="#a286f4"
-                            />
-                        </span>
-                    )}
-                    <div className="w-full h-max flex flex-col gap-4">
-                        <div className="w-full h-max flex flex-col items-center gap-4">
-                            <p className="text-[#364a63] text-2xl w-max flex flex-col items-center font-semibold">
-                                STARTER PLAN
-                                <span className="text-sm font-normal text-[#8094ae] ">
-                                    Enjoy entry level of invest & earn money.
+            <div className="w-full flex flex-wrap phone:flex-col justify-between h-max gap-2">
+                {loading ? (
+                    <h3 className="text-center w-full">Loading plans...</h3>
+                ) : userDatas.length === 0 ? (
+                    <h3 className="text-center w-full">No plan available</h3>
+                ) : (
+                    userDatas.map((e, i) => (
+                        <div
+                            key={i}
+                            className="w-1/4 phone:w-full h-max bg-white flex p-10 border flex-col justify-between gap-4 border-gray-300 rounded relative"
+                        >
+                            {plan === i && (
+                                <span className="w-max h-max absolute top-4 right-4">
+                                    <FaCheckCircle size={24} color="#a286f4" />
                                 </span>
-                            </p>
-                            <div className="w-full flex items-center justify-between">
-                                <p className="w-1/2 h-max flex flex-col items-center text-3xl text-[#526484]">
-                                    525%
-                                    <span className="text-xs text-[#8094ae]">
-                                        Interest
-                                    </span>
-                                </p>
-                                <p className="w-1/2 h-max flex flex-col items-center text-3xl text-[#526484]">
-                                    30
-                                    <span className="text-xs text-[#8094ae]">
-                                        Days
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="w-full h-max flex flex-col gap-3 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
-                            <p className="w-full h-max flex justify-between">
-                                Min Deposits <span>$1,000.00</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Max Deposits <span>$10,000.00</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Renewable <span>Yes</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Referral Bonus <span>10%</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Turnover <span>Monthly</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div className="w-full h-max mt-2">
-                        <div className="w-full h-max mt-2">
-                            {plan === 1 ? (
-                                <button className="w-full h-max py-3 text-xs font-semibold rounded text-[#fff] bg-[#a286f4] border border-gray-300">
-                                    PLAN SELECTED
-                                </button>
-                            ) : (
-                                <button
-                                    className="w-full h-max py-3 text-xs font-semibold rounded text-[#364a63] bg-[#f5f6fa] border border-gray-300"
-                                    onClick={() => setPlan(1)}
-                                >
-                                    CHOOSE THIS PLAN
-                                </button>
                             )}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-1/3 phone:flex-col phone:w-full phone:h-max h-max bg-white flex p-10 border flex-col justify-between gap-4 border-gray-300 rounded relative">
-                    {plan === 2 && (
-                        <span className="w-max h-max absolute top-4 right-4">
-                            <FaCheckCircle
-                                className=""
-                                size={24}
-                                color="#a286f4"
-                            />
-                        </span>
-                    )}
-
-                    <div className="w-full h-max flex flex-col gap-4">
-                        <div className="w-full h-max flex flex-col items-center gap-4">
-                            <p className="text-[#364a63] text-2xl w-max flex flex-col items-center font-semibold">
-                                SILVER PLAN
-                                <span className="text-sm font-normal text-[#8094ae] ">
-                                    Enjoy entry level of invest & earn money.
-                                </span>
-                            </p>
-                            <div className="w-full flex items-center justify-between">
-                                <p className="w-1/2 h-max flex flex-col items-center text-3xl text-[#526484]">
-                                    555%
-                                    <span className="text-xs text-[#8094ae]">
-                                        Interest
-                                    </span>
-                                </p>
-                                <p className="w-1/2 h-max flex flex-col items-center text-3xl text-[#526484]">
-                                    60
-                                    <span className="text-xs text-[#8094ae]">
-                                        Days
-                                    </span>
-                                </p>
+                            <div className="w-full h-max flex flex-col gap-4">
+                                <div className="w-full flex flex-col items-center gap-4">
+                                    <p className=" w-full gap-2 text-center text-[#364a63] flex flex-col text-2xl font-semibold">
+                                        {e?.planName}
+                                        <span className="text-sm font-normal text-[#8094ae]">
+                                             Enjoy entry level of invest & earn money.
+                                        </span>
+                                    </p>
+                                    <div className="w-full flex items-center justify-between">
+                                        <p className="w-1/2 flex flex-col text-1xl text-[#526484]">
+                                            525%
+                                            <span className="text-xs text-[#8094ae]">Interest</span>
+                                        </p>
+                                        <p className="w-1/2  flex flex-col text-1xl text-[#526484]">
+                                            35
+                                            <span className="text-xs text-[#8094ae]">Days</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="w-full flex flex-col gap-3 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
+                                    <p className="w-full flex justify-between">
+                                        Min Deposits <span>${e?.minimumDeposit}</span>
+                                    </p>
+                                    <p className="w-full flex justify-between">
+                                        Max Deposits <span>${e?.maximumDeposit}</span>
+                                    </p>
+                                    <p className="w-full flex justify-between">
+                                        Renewable <span>{e?.renewable}</span>
+                                    </p>
+                                    <p className="w-full flex justify-between">
+                                        Referral Bonus <span>{e?.referralBonus || 50}%</span>
+                                    </p>
+                                    <p className="w-full flex justify-between">
+                                        Turnover <span></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="w-full mt-2">
+                                {plan === i ? (
+                                    <button className="w-full py-3 text-xs font-semibold rounded text-[#fff] bg-[#a286f4]">
+                                        PLAN SELECTED
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="w-full py-3 text-xs font-semibold rounded text-[#364a63] bg-[#f5f6fa]"
+                                        onClick={() => setPlan(i)}
+                                    >
+                                        CHOOSE THIS PLAN
+                                    </button>
+                                )}
                             </div>
                         </div>
-                        <div className="w-full h-max flex flex-col gap-3 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
-                            <p className="w-full h-max flex justify-between">
-                                Min Deposits <span>$10,000.00</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Max Deposits <span>$100,000.00</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Renewable <span>Yes</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Referral Bonus <span>10%</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Turnover <span>Monthly</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div className="w-full h-max mt-2">
-                        {plan === 2 ? (
-                            <button className="w-full h-max py-3 text-xs font-semibold rounded text-[#fff] bg-[#a286f4] border border-gray-300">
-                                PLAN SELECTED
-                            </button>
-                        ) : (
-                            <button
-                                className="w-full h-max py-3 text-xs font-semibold rounded text-[#364a63] bg-[#f5f6fa] border border-gray-300"
-                                onClick={() => setPlan(2)}
-                            >
-                                CHOOSE THIS PLAN
-                            </button>
-                        )}
-                    </div>
-                </div>
-                <div className="w-1/3 phone:flex-col phone:w-full phone:h-max h-max bg-white flex p-10 border flex-col justify-between gap-4 border-gray-300 rounded relative">
-                    {plan === 3 && (
-                        <span className="w-max h-max absolute top-4 right-4">
-                            <FaCheckCircle
-                                className=""
-                                size={24}
-                                color="#a286f4"
-                            />
-                        </span>
-                    )}
-                    <div className="w-full h-max flex flex-col gap-4">
-                        <div className="w-full h-max flex flex-col items-center gap-4">
-                            <p className="text-[#364a63] text-2xl w-max flex flex-col items-center font-semibold">
-                                GOLD PLAN
-                                <span className="text-sm font-normal text-[#8094ae] ">
-                                    Enjoy entry level of invest & earn money.
-                                </span>
-                            </p>
-                            <div className="w-full flex items-center justify-between">
-                                <p className="w-1/2 h-max flex flex-col items-center text-3xl text-[#526484]">
-                                    575%
-                                    <span className="text-xs text-[#8094ae]">
-                                        Interest
-                                    </span>
-                                </p>
-                                <p className="w-1/2 h-max flex flex-col items-center text-3xl text-[#526484]">
-                                    90
-                                    <span className="text-xs text-[#8094ae]">
-                                        Days
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="w-full h-max flex flex-col gap-3 border-t-2 border-t-[#a286f4] mt-2 pt-5 text-sm text-[#526484]">
-                            <p className="w-full h-max flex justify-between">
-                                Min Deposits <span>$100,000.00</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Max Deposits <span>$1,000,000.00</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Renewable <span>Yes</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Referral Bonus <span>10%</span>
-                            </p>
-                            <p className="w-full h-max flex justify-between">
-                                Turnover <span>Monthly</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div className="w-full h-max mt-2">
-                        {plan === 3 ? (
-                            <button className="w-full h-max py-3 text-xs font-semibold rounded text-[#fff] bg-[#a286f4] border border-gray-300">
-                                PLAN SELECTED
-                            </button>
-                        ) : (
-                            <button
-                                className="w-full h-max py-3 text-xs font-semibold rounded text-[#364a63] bg-[#f5f6fa] border border-gray-300"
-                                onClick={() => setPlan(3)}
-                            >
-                                CHOOSE THIS PLAN
-                            </button>
-                        )}
-                    </div>
-                </div>
+                    ))
+                )}
             </div>
-            <div className="w-max h-max flex mt-4">
+            <div className="w-max mt-4">
                 <button
-                    className="w-max h-max py-3 px-4 flex items-center gap-2 text-sm font-semibold rounded text-[#fff] bg-[#a286f4] border border-gray-300"
+                    className="py-3 px-4 flex items-center gap-2 text-sm font-semibold rounded text-[#fff] bg-[#a286f4]"
                     onClick={handleProceed}
                 >
                     Continue to Invest <FaArrowRightLong />

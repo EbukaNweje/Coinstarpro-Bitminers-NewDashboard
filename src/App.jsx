@@ -20,6 +20,9 @@ import Referral from "./pages/dashboard/Referral";
 import Forgottenpassword from "./pages/auth/Forgottenpassword";
 import Reset from "./pages/auth/Reset";
 import Profit from "./pages/dashboard/Profit";
+import DepositHistoryView from "./pages/dashboard/DepositHistoryView";
+import Investmentpay from "./pages/dashboard/Investmentpay";
+import Withdrawals from "./pages/dashboard/Withdrawals";
 
 const App = () => {
     const router = createHashRouter([
@@ -53,12 +56,15 @@ const App = () => {
                 { path: "new-withdrawal",element: <NewWithdrawal />,},
                 { path: "new-bonus",element: <NewBonus />,},
                 { path: "my-invest",element: <Investments />,},
-                { path: "my-invest/:id",element: <InvestmentsView />,},
+                { path: "my-invests/:id",element: <InvestmentsView />,},
+                { path: "my-deposit/:id",element: <DepositHistoryView/>,},
+                { path: "withdraw-details/:id",element: <Withdrawals/>,},
                 { path: "my-deposit",element: <DepositHistory />,},
                 { path: "my-withdrawal",element: <MyWithdrawal />,},
                 { path: "profile",element: <Profile />,},
                 { path: "referus",element: <Referral />,},
                 { path: "profit",element: <Profit />,},
+                { path: "Investmentpay",element: <Investmentpay />,},
             ],
         },
     ]);
