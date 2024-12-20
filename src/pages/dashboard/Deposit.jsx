@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch } from "react-redux";
 import { walletInfo } from "../../global/features";
-// import {toast} from "react-toastify";
 
 const Deposit = () => {
   const navigate = useNavigate()
@@ -25,6 +24,7 @@ const Deposit = () => {
           message: "You must accept the terms and conditions",
         }),
     })
+
 
      const {
         register,
@@ -53,7 +53,7 @@ const Deposit = () => {
   useEffect(() => {
     axios
         .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-        .then((response) => {
+        .then((response) => {     
             const rate = response.data.bpi.USD.rate.replace(",", ""); // assuming USD rate
             setExchangeRate(parseFloat(rate));
         })
@@ -73,9 +73,7 @@ const handleProceed = () => {
 const handlegetallWalletAddress = async () => {
     await axios.get('https://coinstarpro-bitminers-new-backnd.vercel.app/api/getallWalletAddress')
         .then(response => {
-             console.log("getwallet:",response?.data?.data);
              setWallets(response?.data?.data)
-            // dispatch(userData(response?.data.data));
         })
         .catch(error => {
             console.log(error);
@@ -89,9 +87,9 @@ useEffect(() => {
     return (
         <div className="w-full h-max flex bg-[#f5f6fa] px-48 phone:gap-6 phone:px-6 phone:flex-col py-4">
             <div className="w-[60%] phone:w-full h-max flex flex-col gap-2">
-                <div className="w-max h-max flex items-center gap-2 text-lg cursor-pointer" onClick={()=> Nav("dashboard")}>
-                    <FaArrowLeftLong onClick={()=> Nav('dashboard')}/>
-                    <p  onClick={()=> Nav('dashboard')}>Back to plan</p>
+                <div className="w-max h-max flex items-center gap-2 text-lg cursor-pointer" onClick={()=> Nav(-1)}>
+                    <FaArrowLeftLong onClick={()=> Nav(-1)}/>
+                    <p >Back to plan</p>
                 </div>
                 <p className="text-4xl font-semibold text-[#364a63]">
                     Ready to get started?
@@ -152,7 +150,7 @@ useEffect(() => {
                 <div className="w-full h-max rounded border bg-white border-gray-300">
                     <div className="w-full h-max flex flex-col p-6 gap-2">
                         <div className="w-full h-max text-lg text-[#364a63] font-semibold">
-                            Your Investment Details
+                            Your Deposit Details
                         </div>
                         
                         <div className="w-full h-max flex justify-between">
@@ -195,7 +193,7 @@ useEffect(() => {
                             className="w-max h-max px-5 py-2 rounded text-white font-semibold bg-[#a286f4]"
                             onClick={handleOpenModal}
                         >
-                            Confirm & Withdrawal
+                            Confirm & Deposit
                         </button>
                     </div>
                 </div>

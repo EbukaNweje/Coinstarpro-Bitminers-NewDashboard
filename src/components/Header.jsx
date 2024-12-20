@@ -14,6 +14,7 @@ import {NavLink, useNavigate} from "react-router-dom";
 import Logo from '../assets/logo.png'
 import { ClipLoader } from "react-spinners";
 import { logout } from "../global/features";
+import { toast } from "react-toastify";
 const Header = () => {
     const [drop1, setDrop1] = useState(false);
     const [drop2, setDrop2] = useState(false);
@@ -32,16 +33,9 @@ const Header = () => {
 
     }
 
-    // function capitalizeWords(str) {
-    //     return str.replace(/\b\w/g, (char) => char.toUpperCase());
-    //   }
-      
-    //   const fullName = `${userDatas?.firstName} ${userDatas?.lastName}`;
-    //   const formattedName = capitalizeWords(fullName);
     const dispatch = useDispatch()
     const Nav = useNavigate()
     const id = useSelector((state)=> state.id)
-    console.log(id);
 
     const handleGetUser = async () => {
         setLoading(true)
@@ -49,18 +43,14 @@ const Header = () => {
             .then(response => {
                 setLoading(false)
                 setUserDatas(response?.data?.data);
-                // dispatch(userData(response?.data.data));
-                // localStorage.setItem("UserId", response?.data);
             })
             .catch(error => {
                 setLoading(false)
-                console.log(error);
+                toast.error("error fetching details , please try again");
             });
     };
-    console.log(userDatas);
   
     const Profil =  userDatas?.firstName.charAt(0).toUpperCase()
-    // const Profile = Profil
     
     useEffect(() => {
         if (id) {
@@ -87,7 +77,6 @@ const handleLogout = () =>{
                                 onClick={() => setOpenSideBar(!openSideBar)}
                             />
                               <img src={Logo} alt="Logo" className="w-full h-full"/>
-                            {/* <p className="text-3xl font-semibold">Logo</p> */}
                         </div>
                         <div className="w-max h-full flex gap-2 text-white phone:hidden">
                             <NavLink to={"/dashboard"}>
@@ -114,9 +103,8 @@ const handleLogout = () =>{
                                             drop1 ? "active" : ""
                                         }`}
                                     >
-                                        <NavLink to={"/dashboard/my-plans"}>
+                                        <NavLink to={"deposit"}>
                                             <div className="w-full pl-2 text-gray-600 h-10 border-b-gray-300 flex items-center cursor-pointer"
-                                            onClick={() => Nav('deposit')}
                                             >
                                                 Deposit
                                             </div>
@@ -161,8 +149,9 @@ const handleLogout = () =>{
                             <div className="w-max h-full border-t-[3px] px-4 border-t-[#a287f4] flex items-center font-semibold">
                                 <div
                                     className="relative w-max h-full"
-                                    onMouseEnter={() => setDrop3(!drop3)}
-                                    onMouseLeave={() => setDrop3(!drop3)}
+                                    // onMouseEnter={() => setDrop3(!drop3)}
+                                    // onMouseLeave={() => setDrop3(!drop3)}
+                                    onClick={() => setDrop3(!drop3)}
                                 >
                                     <div className="w-max h-full flex items-center gap-2">
                                         HISTORY
@@ -229,7 +218,6 @@ const handleLogout = () =>{
                                 </p>
                             </div>
                         </div>
-                        {/* onMouseLeave={() => setDrop5(false)} */}
                         <div className="w-max h-max"  >
                             <IoIosNotificationsOutline
                                 size={28}

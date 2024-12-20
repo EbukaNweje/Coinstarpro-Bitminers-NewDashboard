@@ -9,34 +9,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { userData } from "../../global/features";
 import { ClipLoader } from "react-spinners";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { toast } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 
 const DashboardHome = () => {
     const [userDatas, setUserDatas] = useState({});
     const [exchangeRate, setExchangeRate] = useState(null);
     const [loading, setLoading] = useState(false)
+    const [state, setState] = useState({
+        value: "https://ap.fininvestohub.com/ref/boduxi",
+        copied: false,
+      });
 
-    const dispatch = useDispatch()
     const Nav = useNavigate()
 
     const id = useSelector((state)=> state?.id)
-    console.log(id);
 
     const handleGetUser = async () => {
         setLoading(true)
         await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
             .then(response => {
                 setLoading(false)
-                 console.log(response?.data?.data);
                 setUserDatas(response?.data?.data);
-                // dispatch(userData(response?.data.data));
-                // localStorage.setItem("UserId", response?.data);
             })
             .catch(error => {
                 setLoading(false)
-                console.log(error);
+                toast.log("error occurred, please try again");
             });
     };
-    console.log(userDatas);
   
     useEffect(() => {
         if (id) {
@@ -55,7 +56,8 @@ const DashboardHome = () => {
                 setExchangeRate(parseFloat(rate));
             })
             .catch((error) => {
-                console.error("Error fetching exchange rate:", error);
+                console.log(error);
+                toast.error("Error fetching exchange rate:");
             });
     }, []); 
 
@@ -237,9 +239,9 @@ const DashboardHome = () => {
                     </div>
                     <div className="w-full h-max flex">
                         <button className="w-full h-max py-3 font-semibold rounded text-white bg-[#a286f4]"
-                        onClick={() => Nav("my-invest")}
+                        onClick={() => Nav("/dashboard/my-plans")}
                         >
-                            See All Investment
+                            Investment plan
                         </button>
                     </div>
                 </div>
@@ -268,13 +270,18 @@ const DashboardHome = () => {
                         <input
                             type="text"
                             className="w-[90%] bg-transparent h-full border-none outline-none"
-                            value={"https://ap.crypto-crest.com/ref/boduxi"}
+                            value={state.value}
                         />
-                        <p className="w-max flex items-center text-sm">
+                        <CopyToClipboard
+                              text={state.value}
+                             onCopy={() => setState({ copied: true })}
+                                 >
+                                  <p className="w-max flex items-center text-sm">
                             <span>
-                                <FaRegCopy />
+                               {state.copied ? 'copied':  <FaRegCopy />}
                             </span>
                         </p>
+                                 </CopyToClipboard>
                     </div>
                 </div>
                 <div className="w-[40%] phone:w-full h-max flex justify-between rounded-r p-6 text-sm">
@@ -287,6 +294,7 @@ const DashboardHome = () => {
                     </p>
                 </div>
             </div>
+            <Toaster position ="top-center"/>
         </div>
     );
 };

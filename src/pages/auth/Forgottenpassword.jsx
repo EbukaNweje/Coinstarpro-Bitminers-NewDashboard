@@ -13,6 +13,7 @@ import { ClipLoader } from 'react-spinners';
 const Forgottenpassword = () => {
     const Nav = useNavigate()
     const [loading,setLoading] = useState(false)
+    const currentYear = new Date().getFullYear();
 
     const User = z.object({
         email: z.string().email({ message: 'Must be a valid email' }),
@@ -94,7 +95,7 @@ const Forgottenpassword = () => {
             </div>
             <div className="w-full phone:h-24 phone:gap-3 phone:flex-col phone:justify-center  phone:py-4 h-14 text-white px-48 flex items-center justify-between bg-[#0e1120]">
                 <div className="w-max flex items-center gap-4">
-                    <p>Copyright © 2024. All rights reserved Crypto-Crest</p>
+                <p className="flex gap-5 items-center text-white">&copy;  Copy Rights {currentYear}. All Rights Reserved fininvestohub</p>
                 </div>
                 <div className="w-max flex items-center gap-5 ">
                     <FaTwitter />

@@ -8,6 +8,7 @@ import { walletInfo } from "../../global/features";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
 
 const DepositPay = () => {
     const Nav = useNavigate()
@@ -17,21 +18,20 @@ const DepositPay = () => {
     const [laoding, setLoading] = useState(false)
     const [userDatas, setUserDatas] = useState();
     const [wallets, setWallets] = useState(null)
-    const [h, setH] = useState()
+    const [pay, setPay] = useState()
+    const [h, setH] = useState();
+    const [coin, setCoin] = useState();
     const [state, setState] = useState({
-        value: h,
-        copied: false,
-      });
-
+      value: h,
+      copied: false,
+    });
 
     //   wallets?.map((props)=> {walletInfo.wallet === props.walletName ? setH(props?.walletName) : "Loading...";})
       
-console.log(h);
 
       const handlegetallWalletAddress = async () => {
         await axios.get('https://coinstarpro-bitminers-new-backnd.vercel.app/api/getallWalletAddress')
             .then(response => {
-                 console.log("getwallet:",response?.data?.data);
                  setWallets(response?.data?.data)
                 // dispatch(userData(response?.data.data));
             })
@@ -40,10 +40,24 @@ console.log(h);
             });
     };
     useEffect(() => {
-        wallets?.map((props)=> {walletInfo.wallet === props.walletName ? setH(props?.walletName) : "Loading...";})
-        console.log(state.value);
+        if (wallets && walletInfo) {
+          wallets.forEach((props) => {
+            if (walletInfo.wallet === props.walletName) {
+              setH(props?.walletAddress);
+              setCoin(props?.coin)
+            }
+          });
+        }
+      }, [wallets, walletInfo]); 
+      
+  
+    useEffect(() => {
+        setState((prevState) => ({
+            ...prevState,
+            value: h,coin,
+          }));
         handlegetallWalletAddress()
-    }, [h])
+    }, [h,coin])
 
       const handleGetUser = async () => {
         setLoading(true)
@@ -65,6 +79,41 @@ console.log(h);
         handleGetUser();
      }
     }, [id])
+
+    const url = `https://coinstarpro-bitminers-new-backnd.vercel.app/api/sendpayment/${id}`
+      const url2 = `https://coinstarpro-bitminers-new-backnd.vercel.app/api/deposit/${id}
+`
+      const data = {
+        amount: walletInfo?.amount
+      }
+      const data2 = {
+        amount: walletInfo?.amount,
+        coin: coin
+      }            
+      
+      const SendPayMenttoadmin = async()=> {
+        axios.post(url2, data2)
+        .then(res => {
+          console.log(res)
+          toast.success(res?.data?.message)
+        }).catch((err)=>{
+          console.log(err)
+          toast.error(err?.res?.data?.message)
+        })
+      }
+      const payNow = async()=> {
+        setLoading(true)
+        axios.post(url, data)
+        .then(res => {
+            setLoading(false)
+            SendPayMenttoadmin()
+            Nav("/dashboard")
+          setPay(true)
+        }).catch((err)=>{
+            setLoading(false)
+          console.log(err)
+        })
+      }
     
     
     return (
@@ -72,7 +121,7 @@ console.log(h);
             <div className="w-full h-max flex flex-col items-center gap-2">
                 <div className="w-full h-max flex items-center gap-2 text-lg cursor-pointer" onClick={() =>Nav(-1)} >
                     <FaArrowLeftLong />
-                    <p>History</p>
+                    <p>Back</p>
                 </div>
                 <p className="text-4xl font-semibold text-[#364a63] w-full text-center">
                     Payment Processor
@@ -190,9 +239,12 @@ console.log(h);
                     <div className="w-full h-20 flex items-center justify-center border-t border-t-gray-300 p-4 bg-[#f5f6fa]">
                         <button
                             className="w-max h-max px-5 py-2 rounded text-white font-semibold bg-[#a286f4]"
-                            onClick={() => toast.success("Successful")}
+                            onClick={() => payNow()}
                         >
-                            Paid
+                             { laoding ? <ClipLoader color='white' className="hover:bg-#a286f4" /> :
+                               " Paid" 
+                               } 
+                            
                         </button>
                     </div>
                     <div className="w-full h-max rounded-b p-4">

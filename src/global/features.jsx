@@ -4,7 +4,8 @@ const initialState = {
     user: {},
     userToken: "",
     id: "",
-    walletInfo: {}
+    walletInfo: {},
+    isLoggedIn: false
 };
 
 const features = createSlice({
@@ -16,6 +17,7 @@ const features = createSlice({
             console.log("User Data:", payload);
         },
         userId: (state, {payload}) => {
+            state.isLoggedIn = true
             state.id = payload;
             console.log("User id:", payload);
         },
