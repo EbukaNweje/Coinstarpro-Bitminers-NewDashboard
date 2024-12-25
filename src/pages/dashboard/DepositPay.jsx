@@ -1,6 +1,7 @@
 import {FaArrowLeftLong} from "react-icons/fa6";
 import {MdInfo} from "react-icons/md";
-import qr from "../../assets/qr.jpg";
+import qr from "../../assets/qr.jpeg";
+import qrr from "../../assets/qrr.jpeg";
 import {toast} from "react-toastify";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
@@ -133,11 +134,19 @@ const DepositPay = () => {
                         below.
                     </div>
                     <div className="w-full h-44 flex items-center justify-center border-t border-t-gray-300 p-2">
-                        <img
+                        {
+                            walletInfo?.wallet === "Bitcoin" ? 
+                            <img
                             src={qr}
                             alt=""
                             className="w-full h-full object-contain"
-                        />
+                        /> : 
+                        <img
+                        src={qrr}
+                        alt=""
+                        className="w-full h-full object-contain"
+                    /> 
+                        }
                     </div>
                     <div className="w-full h-max flex flex-col border-t border-t-gray-300 p-4">
                         <div className="w-full flex flex-col gap-2">
