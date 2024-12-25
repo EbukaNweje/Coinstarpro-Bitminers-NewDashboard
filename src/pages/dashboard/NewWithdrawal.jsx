@@ -13,8 +13,8 @@ import { ClipLoader } from "react-spinners";
 const NewWithdrawal = () => {
     const Nav = useNavigate()
     const [amount, setAmount] = useState(0.00)
-    const [wallet, setWallet] = useState("Xbdgsghshsh")
-    const [loading, setLoading] = useState("Xbdgsghshsh")
+    const [wallet, setWallet] = useState("")
+    const [loading, setLoading] = useState("loading...")
     const [openModal, setOpenModal] = useState(false);
     const [exchangeRate, setExchangeRate] = useState(null);
     const [userDatas, setUserDatas] = useState(null);
@@ -139,7 +139,7 @@ const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
                         <input
                                 type="text"
                                 className="w-full h-14 flex items-center border border-gray-300 rounded px-4 py-2 bg-white"
-                                 placeholder="address*"
+                                 placeholder="Wallet Address*"
                                 onChange={handleWallet}
                             />
                     </div>

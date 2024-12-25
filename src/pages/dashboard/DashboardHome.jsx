@@ -17,8 +17,10 @@ const DashboardHome = () => {
     const [userDatas, setUserDatas] = useState({});
     const [exchangeRate, setExchangeRate] = useState(null);
     const [loading, setLoading] = useState(false)
+    // const userName = userDatas?.userName
+    // console.log("this is UserName", userName)
     const [state, setState] = useState({
-        value: "https://ap.fininvestohub.com/ref/boduxi",
+        value: `https://ap.fininvestohub.com/ref/`,
         copied: false,
       });
 
