@@ -56,7 +56,7 @@ const Signup = () => {
   const Onsubmit = async (data, e) => {
     e.preventDefault(); 
     setLoading(true)
-    const url = 'https://coinstarpro-bitminers-new-backnd.vercel.app/api/register'
+    const url = 'https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/register'
     const FormData ={
       password: data.password,
       email: data.email,

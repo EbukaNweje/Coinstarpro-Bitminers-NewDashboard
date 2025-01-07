@@ -52,7 +52,7 @@ const NewBonus = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post("https://coinstarpro-bitminers-new-backnd.vercel.app/api/bonus-transfer", {
+            const response = await axios.post("https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/bonus-transfer", {
                 wallet,
                 amount,
             });

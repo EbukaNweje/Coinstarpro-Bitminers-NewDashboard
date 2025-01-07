@@ -17,7 +17,7 @@ const id = useSelector((state)=> state.id)
         setLoading(true);
         try {
             const response = await axios.get(
-                `https://coinstarpro-bitminers-new-backnd.vercel.app/api/getallinvestmentplan/${id}`
+                `https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/getallinvestmentplan/${id}`
             );
             setUserDatas(response.data.data);
             console.log(response.data.data);

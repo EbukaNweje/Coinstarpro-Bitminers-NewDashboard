@@ -39,7 +39,7 @@ const Profile = () => {
   const Onsubmit = async (data, e) => {
     e.preventDefault(); 
     // setLoading(true)
-    // const url = 'https://coinstarpro-bitminers-new-backnd.vercel.app/api/register'
+    // const url = 'https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/register'
     // const FormData ={
     //   password: data.password,
     //   email: data.email,
@@ -69,7 +69,7 @@ const Profile = () => {
 
     const handleGetUser = async () => {
         setLoading(true)
-        await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
+        await axios.get(`https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/userdata/${id}`)
             .then(response => {
                 setLoading(false)
                  console.log(response?.data?.data);

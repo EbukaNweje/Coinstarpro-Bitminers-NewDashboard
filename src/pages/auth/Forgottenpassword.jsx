@@ -26,7 +26,7 @@ const Forgottenpassword = () => {
       const Onsubmit = async (data, e) => {
         e.preventDefault(); 
         setLoading(true)
-        const url = 'https://coinstarpro-bitminers-new-backnd.vercel.app/api/forgot-password'
+        const url = 'https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/forgot-password'
         const FormData ={
             email: data.email
         }

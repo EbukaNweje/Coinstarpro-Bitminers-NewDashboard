@@ -38,7 +38,7 @@ const Reset = () => {
     
       const Onsubmit = async (data) => {
             setLoading(true)
-            const url = `https://coinstarpro-bitminers-new-backnd.vercel.app/api/resetLink${id}/${token}`
+            const url = `https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/resetLink${id}/${token}`
             const FormData ={
             password: data.password,
             confirmPassword: data.confirmPassword,

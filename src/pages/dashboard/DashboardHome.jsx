@@ -30,7 +30,7 @@ const DashboardHome = () => {
 
     const handleGetUser = async () => {
         setLoading(true)
-        await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
+        await axios.get(`https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/userdata/${id}`)
             .then(response => {
                 setLoading(false)
                 setUserDatas(response?.data?.data);

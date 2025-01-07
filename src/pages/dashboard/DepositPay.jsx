@@ -31,7 +31,7 @@ const DepositPay = () => {
       
 
       const handlegetallWalletAddress = async () => {
-        await axios.get('https://coinstarpro-bitminers-new-backnd.vercel.app/api/getallWalletAddress')
+        await axios.get('https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/getallWalletAddress')
             .then(response => {
                  setWallets(response?.data?.data)
                 // dispatch(userData(response?.data.data));
@@ -62,7 +62,7 @@ const DepositPay = () => {
 
       const handleGetUser = async () => {
         setLoading(true)
-        await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
+        await axios.get(`https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/userdata/${id}`)
             .then(response => {
                 setLoading(false)
                  console.log(response?.data?.data);
@@ -81,8 +81,8 @@ const DepositPay = () => {
      }
     }, [id])
 
-    const url = `https://coinstarpro-bitminers-new-backnd.vercel.app/api/sendpayment/${id}`
-      const url2 = `https://coinstarpro-bitminers-new-backnd.vercel.app/api/deposit/${id}
+    const url = `https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/sendpayment/${id}`
+      const url2 = `https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/deposit/${id}
 `
       const data = {
         amount: walletInfo?.amount
