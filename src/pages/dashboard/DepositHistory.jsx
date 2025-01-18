@@ -19,7 +19,7 @@ const DepositHistory = () => {
         setLoading(true);
         try {
             const response = await axios.get(
-                `https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/getalldeposit/${id}`
+                `https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/getalldeposit/${id}`
             );
             console.log('API Response:', response.data.data);
             // const depositsArray = Object.entries(response.data.data).map(([key, value]) => ({ key, value }));
