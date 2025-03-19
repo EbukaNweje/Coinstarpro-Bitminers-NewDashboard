@@ -71,7 +71,7 @@ const handleProceed = () => {
 };
 
 const handlegetallWalletAddress = async () => {
-    await axios.get('https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/getallWalletAddress')
+    await axios.get('https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/getallWalletAddress')
         .then(response => {
              setWallets(response?.data?.data)
         })

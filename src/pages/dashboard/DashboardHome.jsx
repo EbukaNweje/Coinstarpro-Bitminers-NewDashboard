@@ -30,7 +30,7 @@ const DashboardHome = () => {
 
     const handleGetUser = async () => {
         setLoading(true)
-        await axios.get(`https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/userdata/${id}`)
+        await axios.get(`https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/userdata/${id}`)
             .then(response => {
                 setLoading(false)
                 setUserDatas(response?.data?.data);
@@ -119,9 +119,9 @@ const DashboardHome = () => {
                             </p>
                             <p className="w-full flex items-center justify-between text-3xl text-white">
                                 { loading ? <ClipLoader color='white' /> :  `$${userDatas?.accountBalance}`}
-                                <span className="text-[#1ee0ac] text-sm">
+                                {/* <span className="text-[#1ee0ac] text-sm">
                                { roundedNumber}
-                                </span>
+                                </span> */}
                             </p>
                         </div>
                     </div>
@@ -135,9 +135,9 @@ const DashboardHome = () => {
                             </p>
                             <p className="w-full flex items-center justify-between text-3xl text-white">
                                 { loading ? <ClipLoader color='white' /> :  `$${userDatas?.totalInvestment}`}
-                                <span className="text-[#1ee0ac] text-sm">
+                                {/* <span className="text-[#1ee0ac] text-sm">
                                     {roundedNumber7}
-                                </span>
+                                </span> */}
                             </p>
                         </div>
                     </div>
@@ -151,9 +151,9 @@ const DashboardHome = () => {
                             </p>
                             <p className="w-full flex items-center justify-between text-3xl text-white">
                                 { loading ? <ClipLoader color='white' /> :  `$${userDatas?.totalProfit}`}
-                                <span className="text-[#1ee0ac] text-sm">
+                                {/* <span className="text-[#1ee0ac] text-sm">
                                     {roundedNumber2}
-                                </span>
+                                </span> */}
                             </p>
                         </div>
                     </div>

@@ -57,7 +57,7 @@ const Investmentpay = () => {
 
   const getAllPlan = () => {
     const url =
-      "https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/getallplan";
+      "https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/getallplan";
     axios
       .get(url)
       .then((response) => {
