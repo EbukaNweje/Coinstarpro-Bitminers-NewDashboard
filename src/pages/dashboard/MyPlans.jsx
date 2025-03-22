@@ -13,7 +13,7 @@ const MyPlans = () => {
     const [userDatas, setUserDatas] = useState([]);
 
     const handleProceed = () => {
-        navigate("/dashboard/deposit");
+        navigate("/dashboard/Investmentpay");
     };
 
     const handleGetAllPlans = async () => {

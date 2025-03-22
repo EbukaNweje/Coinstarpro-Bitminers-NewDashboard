@@ -38,17 +38,17 @@ const DepositHistory = () => {
         }
     }, [id]);
 
-    useEffect(() => {
-        axios
-            .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-            .then((response) => {     
-                const rate = response.data.bpi.USD.rate.replace(",", ""); // assuming USD rate
-                setExchangeRate(parseFloat(rate));
-            })
-            .catch((error) => {
-                console.error("Error fetching exchange rate:", error);
-            });
-    }, []); 
+    // useEffect(() => {
+    //     axios
+    //         .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+    //         .then((response) => {     
+    //             const rate = response.data.bpi.USD.rate.replace(",", ""); // assuming USD rate
+    //             setExchangeRate(parseFloat(rate));
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching exchange rate:", error);
+    //         });
+    // }, []); 
 
     // const bitcoinValue = userDatas?.amount / exchangeRate;
 // const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
