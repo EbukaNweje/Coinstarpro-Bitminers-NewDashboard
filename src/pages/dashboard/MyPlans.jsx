@@ -117,12 +117,12 @@ const MyPlans = () => {
                 )}
             </div>
             <div className="w-max mt-4">
-                <button
+                {/* <button
                     className="py-3 px-4 flex items-center gap-2 text-sm font-semibold rounded text-[#fff] bg-[#a286f4]"
                     onClick={handleProceed}
                 >
                     Continue to Invest <FaArrowRightLong />
-                </button>
+                </button> */}
             </div>
         </div>
     );
