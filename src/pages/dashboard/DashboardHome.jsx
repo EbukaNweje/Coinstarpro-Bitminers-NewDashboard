@@ -37,7 +37,7 @@ const DashboardHome = () => {
             })
             .catch(error => {
                 setLoading(false)
-                toast.log("error occurred, please try again");
+                // toast.log("error occurred, please try again");
             });
     };
   
@@ -50,33 +50,33 @@ const DashboardHome = () => {
     const totalBalance = userDatas?.accountBalance + userDatas?.totalProfit
     const totalTradingBalance =  userDatas.totalWithdrawal + userDatas.tradingAccounts    
 
-    useEffect(() => {
-        axios
-            .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-            .then((response) => {
-                const rate = response?.data?.bpi?.USD?.rate.replace(",", ""); // assuming USD rate
-                setExchangeRate(parseFloat(rate));
-            })
-            .catch((error) => {
-                console.log(error);
-                toast.error("Error fetching exchange rate:");
-            });
-    }, []); 
+    // useEffect(() => {
+    //     axios
+    //         .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+    //         .then((response) => {
+    //             const rate = response?.data?.bpi?.USD?.rate.replace(",", ""); // assuming USD rate
+    //             setExchangeRate(parseFloat(rate));
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //             // toast.error("Error fetching exchange rate:");
+    //         });
+    // }, []); 
 
-    const bitcoinValue = userDatas?.accountBalance / exchangeRate;
-    const bitcoinValue2 = userDatas?.totalProfit / exchangeRate;
-    const bitcoinValue3 = userDatas?.bonus / exchangeRate;
-    const bitcoinValue4 = userDatas?.ref / exchangeRate;
-    const bitcoinValue5 = userDatas?.totalDeposit / exchangeRate;
-    const bitcoinValue6 = userDatas?.totalWithdrawal / exchangeRate;
-    const bitcoinValue7 = userDatas?.totalInvestment / exchangeRate;
-    const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
-    const roundedNumber2 = parseFloat(bitcoinValue2.toFixed(8));
-    const roundedNumber3 = parseFloat(bitcoinValue3.toFixed(8));
-    const roundedNumber4 = parseFloat(bitcoinValue4.toFixed(8));
-    const roundedNumber5 = parseFloat(bitcoinValue5.toFixed(8));
-    const roundedNumber6 = parseFloat(bitcoinValue6.toFixed(8));
-    const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
+    // const bitcoinValue = userDatas?.accountBalance / exchangeRate;
+    // const bitcoinValue2 = userDatas?.totalProfit / exchangeRate;
+    // const bitcoinValue3 = userDatas?.bonus / exchangeRate;
+    // const bitcoinValue4 = userDatas?.ref / exchangeRate;
+    // const bitcoinValue5 = userDatas?.totalDeposit / exchangeRate;
+    // const bitcoinValue6 = userDatas?.totalWithdrawal / exchangeRate;
+    // const bitcoinValue7 = userDatas?.totalInvestment / exchangeRate;
+    // const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
+    // const roundedNumber2 = parseFloat(bitcoinValue2.toFixed(8));
+    // const roundedNumber3 = parseFloat(bitcoinValue3.toFixed(8));
+    // const roundedNumber4 = parseFloat(bitcoinValue4.toFixed(8));
+    // const roundedNumber5 = parseFloat(bitcoinValue5.toFixed(8));
+    // const roundedNumber6 = parseFloat(bitcoinValue6.toFixed(8));
+    // const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
 
     return (
         <div className="w-full h-max px-48 phone:px-6 py-10 phone:py-6 flex flex-col gap-8 ">
