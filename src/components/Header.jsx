@@ -46,7 +46,7 @@ const Header = () => {
             })
             .catch(error => {
                 setLoading(false)
-                // toast.error("error fetching details , please try again");
+                // toast.error("error fetching details , please try again")
             });
     };
   
