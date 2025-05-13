@@ -98,7 +98,7 @@ const Investmentpay = () => {
   }
 
   const handleProceed = async() => {
-    const url = `https://https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/invest/${userId}`
+    const url = `https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/invest/${userId}`
       setLoading(true)
       axios.post(url, data)
       .then(res => {
@@ -198,7 +198,7 @@ const Investmentpay = () => {
               className="px-5 py-2 rounded text-white font-semibold bg-[#a286f4]"
               onClick={handleOpenModal}
             >
-              Confirm & Withdrawal
+              Confirm & Invest
             </button>
           </div>
         </div>

@@ -50,17 +50,17 @@ const Deposit = () => {
     setWallet(e.target.value)
   }
 
-  useEffect(() => {
-    axios
-        .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-        .then((response) => {     
-            const rate = response.data.bpi.USD.rate.replace(",", ""); // assuming USD rate
-            setExchangeRate(parseFloat(rate));
-        })
-        .catch((error) => {
-            console.error("Error fetching exchange rate:", error);
-        });
-}, []); 
+//   useEffect(() => {
+//     axios
+//         .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+//         .then((response) => {     
+//             const rate = response.data.bpi.USD.rate.replace(",", ""); // assuming USD rate
+//             setExchangeRate(parseFloat(rate));
+//         })
+//         .catch((error) => {
+//             console.error("Error fetching exchange rate:", error);
+//         });
+// }, []); 
 
 const bitcoinValue = amount / exchangeRate;
 const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
@@ -103,6 +103,7 @@ useEffect(() => {
                             onChange={handleWallet}
                             className="w-full h-14 border border-gray-300 rounded px-4 py-2"
                         >
+                            <option value="">Select wallet</option>
                             {
                                 wallets?.map((props, index)=>(
                                     <option value={props.walletName} key={index}>{props.walletName}</option>

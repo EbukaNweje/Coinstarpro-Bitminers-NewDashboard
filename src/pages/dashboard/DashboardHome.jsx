@@ -27,6 +27,7 @@ const DashboardHome = () => {
     const Nav = useNavigate()
 
     const id = useSelector((state)=> state?.id)
+    // console.log(id)
 
     const handleGetUser = async () => {
         setLoading(true)
