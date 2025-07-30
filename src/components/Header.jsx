@@ -36,12 +36,14 @@ const Header = () => {
     const dispatch = useDispatch()
     const Nav = useNavigate()
     const id = useSelector((state)=> state.id)
+    console.log("this is the id", userDatas);
 
     const handleGetUser = async () => {
         setLoading(true)
-        await axios.get(`https://coinstarpro-bitminers-new-backnd.vercel.app/api/userdata/${id}`)
+        await axios.get(`https://coinstarpro-bitminers-new-backnd-three.vercel.app/api/userdata/${id}`)
             .then(response => {
                 setLoading(false)
+                console.log(response)
                 setUserDatas(response?.data?.data);
             })
             .catch(error => {
@@ -207,9 +209,9 @@ const handleLogout = () =>{
                                 <FaUserCircle size={28} onClick={() => Nav('profile')}/>
                             </div>
                             <div className="w-max h-max flex flex-col phone:hidden">
-                                    {
+                                    {/* {
                                         userDatas?.verify === true ? <p className="text-xs font-semibold text-green-500"> verified </p> : <p className="text-xs font-semibold text-red-500"> Unverified</p>
-                                    }
+                                    } */}
                                 <p className="w-max flex items-center text-xs font-semibold">
                                  { laoding ? <ClipLoader color='white' /> :  `${userDatas?.firstName} ${userDatas?.lastName}${" "}`}
                                     <span>
